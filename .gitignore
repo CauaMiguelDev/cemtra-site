@@ -1,0 +1,14 @@
+# vídeos de prévia (não fazem parte do site)
+previa-*.mp4
+
+# ferramentas de desenvolvimento e capturas
+.claude/
+.impeccable/
+.playwright-mcp/
+
+# imagem avulsa da raiz (origem não confirmada)
+Gemini_Generated_Image_*.png
+
+# sistema
+Thumbs.db
+desktop.ini

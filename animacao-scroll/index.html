@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tour pela clínica | CEMTRA</title>
+  <meta name="description" content="Um voo pela clínica CEMTRA, da porta ao consultório. Medicina do trabalho em Taguatinga e no DF.">
+  <meta name="theme-color" content="#0E1013">
+  <!-- liga a sequência só quando há JS e o movimento não está reduzido; sem isso fica a versão estática -->
+  <script>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('sequencia');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;800&display=swap">
+  <link rel="preload" as="image" href="frames/frame-0001.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <section class="tour" aria-label="Tour pela clínica">
+      <div class="tour__palco">
+        <img class="tour__poster" src="frames/frame-0001.jpg" width="1280" height="720" alt="Fachada da Clínica CEMTRA: letreiro, faixa laranja com os serviços e portas de vidro na entrada">
+        <canvas class="tour__canvas" aria-hidden="true"></canvas>
+
+        <a class="tour__marca" href="../">CEMTRA</a>
+        <p class="tour__carregando" aria-hidden="true">Carregando o tour <span>0%</span></p>
+
+        <div class="tour__textos">
+          <div class="tour__texto visivel" data-de="0" data-ate=".16">
+            <h1>Entre na CEMTRA</h1>
+            <p>Role a página e atravesse a clínica, da porta ao consultório.</p>
+            <span class="tour__dica" aria-hidden="true">Role para entrar</span>
+          </div>
+          <div class="tour__texto" data-de=".22" data-ate=".42">
+            <h2>Recepção</h2>
+            <p>Espaço amplo para receber a sua equipe com conforto.</p>
+          </div>
+          <div class="tour__texto" data-de=".45" data-ate=".72">
+            <h2>Consultórios</h2>
+            <p>Exames ocupacionais do admissional ao demissional.</p>
+          </div>
+          <div class="tour__texto" data-de=".78" data-ate="2">
+            <h2>Tudo em um só lugar</h2>
+            <p>Exames, laudos e saúde mental ocupacional com um só parceiro.</p>
+          </div>
+        </div>
+
+        <div class="tour__barra" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+
+    <section class="depois">
+      <h2>Agende os exames da sua equipe</h2>
+      <p>Cinco unidades no DF e entorno. Matriz em Taguatinga, QND 47, de segunda a sexta, das 7h às 17h.</p>
+      <div class="depois__acoes">
+        <a class="botao" href="https://wa.me/5561993703306" target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
+        <a class="botao botao--linha" href="../">Voltar ao site</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/vendor/lenis.min.js" defer></script>
+  <script src="script.js?v=4" defer></script>
+</body>
+</html>
