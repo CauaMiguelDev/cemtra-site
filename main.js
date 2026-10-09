@@ -528,28 +528,24 @@
   }));
 
   /* ---------- hero: entrada (cortina na primeira visita da sessão) ---------- */
-  const titulo = $('[data-titulo]');
   const quebra = (alvo, tipo = 'lines,words') => window.SplitText ? SplitText.create(alvo, { type: tipo, mask: 'lines', linesClass: 'linha' }) : null;
-  const splitTitulo = quebra(titulo);
-  const intro = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
-  intro
-    .from(splitTitulo ? splitTitulo.words : titulo, { yPercent: 115, rotate: 5, opacity: splitTitulo ? 1 : 0, duration: 1.3, stagger: .045 }, .25)
-    .from('[data-intro]', { y: 34, opacity: 0, duration: 1.1, stagger: .12 }, .75)
-    .from('[data-intro-chip]', { y: 40, opacity: 0, scale: .85, duration: 1.1, stagger: .14, ease: 'back.out(1.5)' }, 1.15);
-  const comecaHero = () => { html.classList.remove('carregando'); intro.timeScale(.8).play(0); };
+  const comecaHero = () => html.classList.remove('carregando');
   const cortina = $('.cortina');
   if (html.classList.contains('intro') && cortina && scrollY < 40) {
     (window.cemtraT || []).forEach(clearTimeout); // a cortina agora cuida da própria saída
     if (lenis) lenis.stop();
-    const tc = gsap.timeline({ defaults: { ease: 'power3.out' }, onComplete: () => { html.classList.remove('intro'); if (lenis) lenis.start(); ScrollTrigger.refresh(); } });
-    tc.from('.cortina__marca img', { rotate: -90, scale: .7, opacity: 0, duration: 1.6 })
-      .from('.cortina__marca > span', { x: -18, opacity: 0, filter: 'blur(8px)', duration: 1.5 }, .35)
-      .to('.cortina__sol', { scale: .6, duration: 2.3, ease: 'sine.inOut' }, .2)
-      .to('.cortina__marca', { y: -12, opacity: 0, filter: 'blur(6px)', duration: 1, ease: 'power2.in' }, 2.3)
-      .to('.cortina__sol', { scale: 1.3, duration: 1.8, ease: 'power2.inOut' }, 2.5)
-      .to(cortina, { opacity: 0, duration: 1.5, ease: 'power2.inOut' }, 2.7)
-      .add(comecaHero, 2.8);
-    cortina.addEventListener('click', () => tc.timeScale(2.5));
+    // a marca entra sobre o concreto; o sol nasce atrás dela e a cortina sobe para mostrar o hero
+    const letras = window.SplitText ? SplitText.create('.cortina__marca > span', { type: 'chars', mask: 'chars' }) : null;
+    const tc = gsap.timeline({ defaults: { ease: 'expo.out' }, onComplete: () => { html.classList.remove('intro'); if (lenis) lenis.start(); ScrollTrigger.refresh(); } });
+    tc.from('.cortina__marca img', { y: 16, scale: .92, opacity: 0, filter: 'blur(10px)', duration: 1.3 }, .1)
+      .from(letras ? letras.chars : '.cortina__marca > span', { yPercent: 110, opacity: 0, duration: 1.1, stagger: .035 }, .4)
+      .fromTo('.cortina__sol', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.8, ease: 'power2.out' }, .5)
+      .to('.cortina__pular', { opacity: 0, duration: .4 }, 2.2)
+      .to('.cortina__marca', { y: -14, opacity: 0, filter: 'blur(6px)', duration: .8, ease: 'power2.in' }, 2.35)
+      .to('.cortina__sol', { scale: 1.2, duration: 1.2, ease: 'sine.inOut' }, 2.35)
+      .add(comecaHero, 2.6)
+      .to(cortina, { yPercent: -100, duration: 1.1, ease: 'expo.inOut' }, 2.7);
+    cortina.addEventListener('click', () => tc.timeScale(4)); // clique em qualquer ponto ou no botão "Pular": termina mais rápido
   } else {
     html.classList.remove('intro');
     comecaHero();
