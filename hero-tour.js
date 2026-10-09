@@ -16,7 +16,6 @@
   if (!canvas || !canvas.getContext || !cena || !window.createImageBitmap) { html.classList.remove('tour'); return; }
   const ctx = canvas.getContext('2d', { alpha: false });
   const barra = hero.querySelector('.hero__barra span');
-  const copia = hero.querySelector('.hero__conteudo');
   const legendas = [...hero.querySelectorAll('.hero__legenda')];
 
   // em celular na vertical só a faixa central aparece (cover): o conjunto recortado (720 px de largura) mostra
@@ -140,7 +139,6 @@
     }
     return -1;
   };
-  const suave = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
   function desenha(forca) {
     const p = atual / ultimo;
@@ -158,7 +156,6 @@
     // texto e barra só mudam quando o progresso muda de verdade
     if (forca || Math.abs(p - ultimoP) > .0005) {
       ultimoP = p;
-      if (copia) copia.style.opacity = 1 - suave(.1, .2, p);
       legendas.forEach(el => el.classList.toggle('visivel', p >= +el.dataset.de && p < +el.dataset.ate));
       if (barra) barra.style.transform = `scaleX(${p})`;
     }

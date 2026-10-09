@@ -22,7 +22,7 @@ Depois abra http://localhost:8000
 - `styles.css`: estilos do site.
 - `main.js`: interações, revelações e navegação.
 - `hero-tour.js`: animação do hero em sequência de quadros, decodificada numa Web Worker.
-- `animacao-scroll/`: demo independente da animação de rolagem.
+- `animacao-scroll/`: demo independente da animação de rolagem. Usa os mesmos quadros do hero (`assets/tour/frames`) e a mesma fonte local.
 - `assets/`: imagens, fontes, quadros do hero e bibliotecas em `vendor/` (GSAP, ScrollTrigger, SplitText e Lenis).
   - `tour/frames`: 300 quadros 1600×900, usados em tela de computador e tablet.
   - `tour/frames-celular`: os mesmos quadros recortados na faixa central (720×900), usados em celular na vertical. Mostram o mesmo conteúdo com cerca da metade dos bytes.

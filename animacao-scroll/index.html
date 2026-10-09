@@ -8,17 +8,15 @@
   <meta name="theme-color" content="#0E1013">
   <!-- liga a sequência só quando há JS e o movimento não está reduzido; sem isso fica a versão estática -->
   <script>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('sequencia');</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;800&display=swap">
-  <link rel="preload" as="image" href="frames/frame-0001.jpg">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" as="font" type="font/woff2" href="../assets/fontes/urbanist-latin.woff2" crossorigin>
+  <link rel="preload" as="image" href="../assets/tour/frames/frame-0001.jpg">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
   <main>
     <section class="tour" aria-label="Tour pela clínica">
       <div class="tour__palco">
-        <img class="tour__poster" src="frames/frame-0001.jpg" width="1280" height="720" alt="Fachada da Clínica CEMTRA: letreiro, faixa laranja com os serviços e portas de vidro na entrada">
+        <img class="tour__poster" src="../assets/tour/frames/frame-0001.jpg" width="1600" height="900" alt="Fachada da Clínica CEMTRA: letreiro, faixa laranja com os serviços e portas de vidro na entrada">
         <canvas class="tour__canvas" aria-hidden="true"></canvas>
 
         <a class="tour__marca" href="../">CEMTRA</a>
@@ -59,6 +57,6 @@
   </main>
 
   <script src="../assets/vendor/lenis.min.js" defer></script>
-  <script src="script.js?v=4" defer></script>
+  <script src="script.js?v=5" defer></script>
 </body>
 </html>

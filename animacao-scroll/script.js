@@ -1,12 +1,12 @@
 /*
-  Tour em sequência de quadros: frames/frame-0001.jpg … frames/frame-0300.jpg
+  Tour em sequência de quadros: ../assets/tour/frames/frame-0001.jpg … frame-0300.jpg (os mesmos do hero do site)
   O palco fica preso (position: sticky) e a rolagem dentro de .tour escolhe o quadro.
   Sem JS ou com prefers-reduced-motion, a página fica só com o pôster (ver styles.css).
 */
 (() => {
   if (!document.documentElement.classList.contains('sequencia')) return;
 
-  const PASTA = 'frames/';
+  const PASTA = '../assets/tour/frames/';
   const TOTAL = 300;
   const SUAVIDADE = .075; // 0 a 1: menor = acompanha a rolagem com mais atraso macio
   // celular ou economia de dados: um quadro sim, um não (metade do download e da memória)

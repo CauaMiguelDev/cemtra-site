@@ -95,21 +95,27 @@
     else az.style.transform = `rotate(${r}deg)`;
   };
   // proximidade do cursor: gira os azulejos perto do ponteiro
+  // no máximo uma vez por quadro, lendo todas as posições antes de girar (ler e escrever alternado força layout)
   const proximidade = (area, raio = 110) => {
-    let ultimoX = 0;
-    area.addEventListener('pointermove', e => {
+    let ultimoX = 0, pendente = null;
+    const processa = () => {
+      const e = pendente;
+      pendente = null;
       const sentido = e.clientX >= ultimoX ? 1 : -1;
       ultimoX = e.clientX;
       const agora = performance.now();
+      const perto = [];
       for (const az of area.querySelectorAll('.azulejo')) {
         const r = az.getBoundingClientRect();
         if (r.bottom < 0 || r.top > innerHeight) continue;
         const dx = r.left + r.width / 2 - e.clientX, dy = r.top + r.height / 2 - e.clientY;
-        if (dx * dx + dy * dy < raio * raio && agora - (+az.dataset.t || 0) > 650) {
-          az.dataset.t = agora;
-          gira(az, sentido);
-        }
+        if (dx * dx + dy * dy < raio * raio && agora - (+az.dataset.t || 0) > 650) perto.push(az);
       }
+      perto.forEach(az => { az.dataset.t = agora; gira(az, sentido); });
+    };
+    area.addEventListener('pointermove', e => {
+      if (!pendente) requestAnimationFrame(processa);
+      pendente = e;
     });
     area.addEventListener('click', e => { const az = e.target.closest('.azulejo'); if (az) gira(az); });
   };
