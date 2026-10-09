@@ -1,5 +1,6 @@
 /*
-  Hero em sequência de quadros: 300 quadros (assets/tour/frames) acompanham a rolagem da primeira tela.
+  Hero em sequência de quadros: 300 quadros (assets/tour/frames; na vertical do celular, assets/tour/frames-celular)
+  acompanham a rolagem da primeira tela.
   Os bytes dos quadros são baixados em paralelo, do mais perto para o mais longe da posição atual.
   Os quadros são decodificados numa Web Worker (fora da thread principal) e só uma janela pequena fica decodificada
   na memória, perto da posição atual. O canvas desenha só quando o quadro muda.
@@ -18,7 +19,11 @@
   const copia = hero.querySelector('.hero__conteudo');
   const legendas = [...hero.querySelectorAll('.hero__legenda')];
 
-  const PASTA = 'assets/tour/frames/';
+  // em celular na vertical só a faixa central aparece (cover): o conjunto recortado (720 px de largura) mostra
+  // o mesmo conteúdo com cerca da metade dos bytes
+  const PASTAS = { tela: 'assets/tour/frames/', celular: 'assets/tour/frames-celular/' };
+  const janelaEstreita = () => innerWidth / innerHeight < .8; // o recorte cobre proporções até 0,8
+  let pasta = janelaEstreita() ? PASTAS.celular : PASTAS.tela;
   const TOTAL = 300;
   const SUAVIDADE = .075;
   // downloads em paralelo: uma requisição de cada vez não acompanha a rolagem (cada quadro custa uma ida e volta à rede)
@@ -35,7 +40,7 @@
   for (let n = 1; n <= TOTAL; n += PASSO) numeros.push(n);
   if (numeros[numeros.length - 1] !== TOTAL) numeros.push(TOTAL);
   const ultimo = numeros.length - 1;
-  const endereco = i => new URL(`${PASTA}frame-${String(numeros[i]).padStart(4, '0')}.jpg`, document.baseURI).href;
+  const endereco = i => new URL(`${pasta}frame-${String(numeros[i]).padStart(4, '0')}.jpg`, document.baseURI).href;
 
   /* ---------- download e decodificação ---------- */
   const baixados = new Map();      // índice -> Blob do JPEG (bytes, ainda não decodificado)
@@ -44,21 +49,22 @@
   const falhas = new Set();
   const tentouNaThread = new Set();
   let emCurso = -1;
-  const agenda = f => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: 150 }) : setTimeout(f, 0));
+  let geracao = 0; // muda quando o conjunto de quadros troca: o que estava em voo deixa de valer
 
-  // a Worker decodifica o JPEG; o ImageBitmap volta pronto (transferido, sem cópia)
+  // a Worker decodifica o JPEG; o ImageBitmap volta pronto (transferido, sem cópia). "g" identifica o conjunto
   const codigoWorker = `self.onmessage = async e => {
     try {
       const bmp = await createImageBitmap(e.data.blob);
-      self.postMessage({ i: e.data.i, bmp }, [bmp]);
-    } catch (erro) { self.postMessage({ i: e.data.i, erro: true }); }
+      self.postMessage({ i: e.data.i, g: e.data.g, bmp }, [bmp]);
+    } catch (erro) { self.postMessage({ i: e.data.i, g: e.data.g, erro: true }); }
   };`;
   let worker = null;
   try { worker = new Worker(URL.createObjectURL(new Blob([codigoWorker], { type: 'text/javascript' }))); } catch (e) { worker = null; }
-  if (worker) worker.onmessage = e => recebe(e.data.i, e.data.erro ? null : e.data.bmp);
+  if (worker) worker.onmessage = e => recebe(e.data.i, e.data.erro ? null : e.data.bmp, e.data.g);
 
   // baixa até BUSCAS quadros ao mesmo tempo, sempre o que está mais perto da posição atual
   function busca() {
+    const g = geracao;
     while (emBusca.size < BUSCAS) {
       let escolhido = -1, dist = Infinity;
       for (let i = 0; i <= ultimo; i++) {
@@ -69,16 +75,17 @@
       emBusca.add(i);
       fetch(endereco(i))
         .then(r => { if (!r.ok) throw new Error(r.status); return r.blob(); })
-        .then(b => { baixados.set(i, b); }, () => { falhas.add(i); })
-        .finally(() => { emBusca.delete(i); agenda(proximo); busca(); });
+        .then(b => { if (g === geracao) baixados.set(i, b); }, () => { if (g === geracao) falhas.add(i); })
+        .finally(() => { if (g !== geracao) return; emBusca.delete(i); proximo(); busca(); });
     }
   }
 
-  function recebe(i, bmp) {
+  function recebe(i, bmp, g) {
+    if (g !== geracao) { if (bmp) bmp.close(); return; } // quadro de um conjunto anterior (a janela girou)
     if (!bmp && worker && !tentouNaThread.has(i)) {
       // a Worker não conseguiu: tenta o mesmo quadro na thread principal (uma vez)
       tentouNaThread.add(i);
-      createImageBitmap(baixados.get(i)).then(b => recebe(i, b), () => recebe(i, null));
+      createImageBitmap(baixados.get(i)).then(b => recebe(i, b, g), () => recebe(i, null, g));
       return;
     }
     emCurso = -1;
@@ -88,7 +95,7 @@
       if (!hero.classList.contains('pronto')) hero.classList.add('pronto');
     } else if (bmp) bmp.close();
     else falhas.add(i);
-    agenda(proximo);
+    proximo();
   }
 
   // mantém na memória só a janela ao redor do centro
@@ -97,7 +104,7 @@
     for (const [i, bmp] of decodificados) {
       if (i < a || i > b) { bmp.close(); decodificados.delete(i); }
     }
-    agenda(proximo);
+    proximo();
   }
 
   // decodifica o quadro já baixado que falta mais perto da posição atual, um de cada vez
@@ -111,10 +118,10 @@
     if (escolhido < 0) return;
     emCurso = escolhido;
     if (worker) {
-      worker.postMessage({ i: escolhido, blob: baixados.get(escolhido) });
+      worker.postMessage({ i: escolhido, blob: baixados.get(escolhido), g: geracao });
     } else {
-      const i = escolhido;
-      createImageBitmap(baixados.get(i)).then(bmp => recebe(i, bmp), () => recebe(i, null));
+      const i = escolhido, g = geracao;
+      createImageBitmap(baixados.get(i)).then(bmp => recebe(i, bmp, g), () => recebe(i, null, g));
     }
   }
 
@@ -182,7 +189,21 @@
   }
 
   /* ---------- canvas responsivo ---------- */
+  // a janela girou e cruzou o limite retrato/paisagem: troca o conjunto e baixa de novo (quadros antigos não servem)
+  function trocaPasta() {
+    const nova = janelaEstreita() ? PASTAS.celular : PASTAS.tela;
+    if (nova === pasta) return;
+    pasta = nova;
+    geracao++;
+    for (const bmp of decodificados.values()) bmp.close();
+    decodificados.clear();
+    baixados.clear(); emBusca.clear(); falhas.clear(); tentouNaThread.clear();
+    emCurso = -1; ultimoQuadro = -1;
+    if (document.readyState === 'complete') busca();
+  }
+
   function ajusta() {
+    trocaPasta();
     // limite de 1.5x: acima disso o custo sobe muito e não há ganho visível na tela
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = Math.round(cena.clientWidth * dpr);

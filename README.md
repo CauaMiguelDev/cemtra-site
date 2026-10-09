@@ -23,7 +23,9 @@ Depois abra http://localhost:8000
 - `main.js`: interações, revelações e navegação.
 - `hero-tour.js`: animação do hero em sequência de quadros, decodificada numa Web Worker.
 - `animacao-scroll/`: demo independente da animação de rolagem.
-- `assets/`: imagens, fontes, quadros do hero (`tour/frames`) e bibliotecas em `vendor/` (GSAP, ScrollTrigger, SplitText e Lenis).
+- `assets/`: imagens, fontes, quadros do hero e bibliotecas em `vendor/` (GSAP, ScrollTrigger, SplitText e Lenis).
+  - `tour/frames`: 300 quadros 1600×900, usados em tela de computador e tablet.
+  - `tour/frames-celular`: os mesmos quadros recortados na faixa central (720×900), usados em celular na vertical. Mostram o mesmo conteúdo com cerca da metade dos bytes.
 
 ## Publicação
 
