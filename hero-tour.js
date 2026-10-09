@@ -1,7 +1,8 @@
 /*
   Hero em sequência de quadros: 300 quadros (assets/tour/frames) acompanham a rolagem da primeira tela.
-  Os quadros são decodificados numa Web Worker (fora da thread principal) e só uma janela pequena fica na memória,
-  perto da posição atual. O canvas desenha só quando o quadro muda.
+  Os bytes dos quadros são baixados em paralelo, do mais perto para o mais longe da posição atual.
+  Os quadros são decodificados numa Web Worker (fora da thread principal) e só uma janela pequena fica decodificada
+  na memória, perto da posição atual. O canvas desenha só quando o quadro muda.
   Sem JS, com prefers-reduced-motion ou sem canvas, o hero fica estático (pôster), ver styles.css.
 */
 (() => {
@@ -20,6 +21,8 @@
   const PASTA = 'assets/tour/frames/';
   const TOTAL = 300;
   const SUAVIDADE = .075;
+  // downloads em paralelo: uma requisição de cada vez não acompanha a rolagem (cada quadro custa uma ida e volta à rede)
+  const BUSCAS = 6;
   // celular fraco ou economia de dados: um quadro sim, um não
   const conexao = navigator.connection || {};
   const PASSO = html.classList.contains('leve') || conexao.saveData || /2g/.test(conexao.effectiveType || '') ? 2 : 1;
@@ -34,28 +37,48 @@
   const ultimo = numeros.length - 1;
   const endereco = i => new URL(`${PASTA}frame-${String(numeros[i]).padStart(4, '0')}.jpg`, document.baseURI).href;
 
-  /* ---------- decodificação fora da thread principal ---------- */
+  /* ---------- download e decodificação ---------- */
+  const baixados = new Map();      // índice -> Blob do JPEG (bytes, ainda não decodificado)
   const decodificados = new Map(); // índice -> ImageBitmap pronto para desenhar
+  const emBusca = new Set();
   const falhas = new Set();
+  const tentouNaThread = new Set();
   let emCurso = -1;
   const agenda = f => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: 150 }) : setTimeout(f, 0));
 
-  // a Worker baixa e decodifica o JPEG; o ImageBitmap volta pronto (transferido, sem cópia)
+  // a Worker decodifica o JPEG; o ImageBitmap volta pronto (transferido, sem cópia)
   const codigoWorker = `self.onmessage = async e => {
     try {
-      const resposta = await fetch(e.data.url);
-      const bmp = await createImageBitmap(await resposta.blob());
+      const bmp = await createImageBitmap(e.data.blob);
       self.postMessage({ i: e.data.i, bmp }, [bmp]);
     } catch (erro) { self.postMessage({ i: e.data.i, erro: true }); }
   };`;
   let worker = null;
   try { worker = new Worker(URL.createObjectURL(new Blob([codigoWorker], { type: 'text/javascript' }))); } catch (e) { worker = null; }
+  if (worker) worker.onmessage = e => recebe(e.data.i, e.data.erro ? null : e.data.bmp);
+
+  // baixa até BUSCAS quadros ao mesmo tempo, sempre o que está mais perto da posição atual
+  function busca() {
+    while (emBusca.size < BUSCAS) {
+      let escolhido = -1, dist = Infinity;
+      for (let i = 0; i <= ultimo; i++) {
+        if (!baixados.has(i) && !emBusca.has(i) && !falhas.has(i) && Math.abs(i - centro) < dist) { escolhido = i; dist = Math.abs(i - centro); }
+      }
+      if (escolhido < 0) return;
+      const i = escolhido;
+      emBusca.add(i);
+      fetch(endereco(i))
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.blob(); })
+        .then(b => { baixados.set(i, b); }, () => { falhas.add(i); })
+        .finally(() => { emBusca.delete(i); agenda(proximo); busca(); });
+    }
+  }
 
   function recebe(i, bmp) {
     if (!bmp && worker && !tentouNaThread.has(i)) {
       // a Worker não conseguiu: tenta o mesmo quadro na thread principal (uma vez)
       tentouNaThread.add(i);
-      fetch(endereco(i)).then(r => r.blob()).then(b => createImageBitmap(b)).then(b => recebe(i, b), () => recebe(i, null));
+      createImageBitmap(baixados.get(i)).then(b => recebe(i, b), () => recebe(i, null));
       return;
     }
     emCurso = -1;
@@ -67,9 +90,6 @@
     else falhas.add(i);
     agenda(proximo);
   }
-  const tentouNaThread = new Set();
-
-  if (worker) worker.onmessage = e => recebe(e.data.i, e.data.erro ? null : e.data.bmp);
 
   // mantém na memória só a janela ao redor do centro
   function aquece() {
@@ -80,21 +100,21 @@
     agenda(proximo);
   }
 
-  // pede o quadro que falta mais perto da posição atual, um de cada vez
+  // decodifica o quadro já baixado que falta mais perto da posição atual, um de cada vez
   function proximo() {
     if (emCurso >= 0) return;
     let escolhido = -1, dist = Infinity;
     const a = Math.max(0, centro - JANELA), b = Math.min(ultimo, centro + JANELA);
     for (let i = a; i <= b; i++) {
-      if (!decodificados.has(i) && !falhas.has(i) && Math.abs(i - centro) < dist) { escolhido = i; dist = Math.abs(i - centro); }
+      if (baixados.has(i) && !decodificados.has(i) && !falhas.has(i) && Math.abs(i - centro) < dist) { escolhido = i; dist = Math.abs(i - centro); }
     }
     if (escolhido < 0) return;
     emCurso = escolhido;
     if (worker) {
-      worker.postMessage({ i: escolhido, url: endereco(escolhido) });
+      worker.postMessage({ i: escolhido, blob: baixados.get(escolhido) });
     } else {
       const i = escolhido;
-      fetch(endereco(i)).then(r => r.blob()).then(b => createImageBitmap(b)).then(bmp => recebe(i, bmp), () => recebe(i, null));
+      createImageBitmap(baixados.get(i)).then(bmp => recebe(i, bmp), () => recebe(i, null));
     }
   }
 
@@ -175,4 +195,7 @@
   new ResizeObserver(ajusta).observe(cena);
   addEventListener('scroll', mira, { passive: true });
   ajusta();
+  // os downloads começam depois do carregamento da página, sem disputar a rede com CSS, JS e fontes
+  if (document.readyState === 'complete') busca();
+  else addEventListener('load', busca, { once: true });
 })();
