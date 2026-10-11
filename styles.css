@@ -837,7 +837,13 @@ strong, b { font-weight: 750; }
 .hero__barra span { display: block; height: 100%; background: var(--sol); transform: scaleX(0); transform-origin: left; }
 
 .tour .hero { height: 520vh; min-height: 0; overflow: visible; }
-.tour .hero__cena { position: sticky; top: 0; }
+/* a cena tem a altura exata da tela: lvh não deixa faixa vazia quando a barra do navegador do celular some,
+   e sem altura mínima os cartões cabem em telas baixas (celular deitado) */
+.tour .hero__cena { position: sticky; top: 0; height: 100vh; height: 100lvh; min-height: 0; }
+/* tela estreita: o pôster usa o mesmo enquadramento do canvas (45% da largura do vídeo, centro a 40% da altura) */
+@media (max-aspect-ratio: 4/5) {
+  .hero__poster { inset: auto; left: 50%; top: clamp(0px, calc(40% - 62.5vw), calc(100% - 125vw)); width: 222.3vw; height: 125vw; transform: translateX(-50%); }
+}
 .tour .hero__legendas, .tour .hero__barra { display: block; }
 /* em rolagem, cartões sem desfoque de fundo: o desfoque é refeito a cada quadro e pesa na placa de vídeo */
 .tour .hero__legenda { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(14,16,19,.72); }
@@ -853,6 +859,21 @@ strong, b { font-weight: 750; }
   .hero__chips { gap: 6px; }
   .hero__chips li { height: 30px; padding: 0 11px; font-size: .78rem; }
   .hero__legenda .botao { justify-self: stretch; justify-content: center; height: 46px; }
+}
+/* tela baixa (celular deitado): cartão compacto, para caber inteiro abaixo do menu */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero__legendas { bottom: 16px; }
+  .hero__legenda { padding: 14px 16px 16px; gap: 10px; border-radius: 22px; }
+  .hero__legenda-topo { gap: 12px; }
+  .hero__legenda .ico-bloco { width: 40px; height: 40px; border-radius: 14px; }
+  .hero__legenda .ico-bloco .i { width: 20px; height: 20px; }
+  .hero__legenda h2 { font-size: 1.3rem; letter-spacing: -.02em; }
+  .hero__legenda p { display: none; }
+  .hero__chips li { height: 30px; padding: 0 11px; font-size: .78rem; }
+}
+/* celular deitado estreito ainda tem a barra de baixo do site: o cartão fica acima dela */
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 760px) {
+  .hero__legendas { bottom: 92px; }
 }
 
 /* texto só para leitores de tela e buscadores */

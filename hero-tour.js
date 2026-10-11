@@ -18,10 +18,14 @@
   const barra = hero.querySelector('.hero__barra span');
   const legendas = [...hero.querySelectorAll('.hero__legenda')];
 
-  // em celular na vertical só a faixa central aparece (cover): o conjunto recortado (720 px de largura) mostra
-  // o mesmo conteúdo com cerca da metade dos bytes
+  const PROPORCAO = 16 / 9; // do vídeo original (os quadros do celular são um recorte central dele)
+  // em tela estreita o "cover" mostraria só um quarto da largura e cortaria a fachada: o vídeo mostra no mínimo
+  // esta fração da largura (= o recorte de 720 px dos quadros do celular) e o resto da altura vira fundo desfocado
+  const LARGURA_MIN = .45;
+  const ALTURA_CENTRO = .4; // centro do vídeo quando ele não ocupa a altura toda (acima dos cartões)
+  // em telas estreitas basta a faixa central: o conjunto recortado mostra o mesmo com cerca da metade dos bytes
   const PASTAS = { tela: 'assets/tour/frames/', celular: 'assets/tour/frames-celular/' };
-  const janelaEstreita = () => innerWidth / innerHeight < .8; // o recorte cobre proporções até 0,8
+  const janelaEstreita = () => innerWidth / innerHeight < LARGURA_MIN * PROPORCAO;
   let pasta = janelaEstreita() ? PASTAS.celular : PASTAS.tela;
   const TOTAL = 300;
   const SUAVIDADE = .075;
@@ -125,11 +129,26 @@
   }
 
   /* ---------- desenho ---------- */
-  // "cover": enche a cena sem distorcer; o excesso é cortado nas bordas
+  // tela larga: enche sem distorcer (o excesso é cortado). Tela estreita: limita o corte da largura e as faixas de
+  // cima e de baixo recebem o próprio quadro reduzido a poucos pixels e esticado (desfoque barato, sem ctx.filter)
+  const fundo = document.createElement('canvas');
+  const fctx = fundo.getContext('2d');
   const pinta = bmp => {
-    const s = Math.max(canvas.width / bmp.width, canvas.height / bmp.height);
+    const cw = canvas.width, ch = canvas.height;
+    const inteira = bmp.height * PROPORCAO;
+    let s = Math.min(Math.max(cw / inteira, ch / bmp.height), cw / (LARGURA_MIN * inteira));
+    s = Math.max(s, cw / bmp.width); // o recorte do celular sempre cobre a largura da tela
     const w = bmp.width * s, h = bmp.height * s;
-    ctx.drawImage(bmp, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+    let y = (ch - h) / 2;
+    if (h < ch) {
+      y = Math.min(Math.max(ch * ALTURA_CENTRO - h / 2, 0), ch - h);
+      const fs = Math.max(fundo.width / bmp.width, fundo.height / bmp.height);
+      fctx.drawImage(bmp, (fundo.width - bmp.width * fs) / 2, (fundo.height - bmp.height * fs) / 2, bmp.width * fs, bmp.height * fs);
+      ctx.drawImage(fundo, 0, 0, cw, ch);
+      ctx.fillStyle = 'rgba(14,16,19,.35)';
+      ctx.fillRect(0, 0, cw, ch);
+    }
+    ctx.drawImage(bmp, (cw - w) / 2, y, w, h);
   };
   // o quadro decodificado mais próximo (nunca desenha um quadro que ainda não está pronto)
   const maisPerto = i => {
@@ -205,6 +224,8 @@
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = Math.round(cena.clientWidth * dpr);
     canvas.height = Math.round(cena.clientHeight * dpr);
+    fundo.width = 32;
+    fundo.height = Math.max(1, Math.round(32 * canvas.height / canvas.width));
     desenha(true);
     mira();
   }

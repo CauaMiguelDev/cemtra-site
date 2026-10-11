@@ -49,11 +49,25 @@
 
   /* ---------- desenho ---------- */
   // "cover": enche o canvas inteiro sem distorcer; o excesso é cortado nas bordas
+  // tela estreita (celular em pé): mostra pelo menos 45% da largura do vídeo, com o centro a 40% da altura, e as
+  // faixas de cima e de baixo recebem o próprio quadro reduzido e esticado (desfoque barato), igual ao hero do site
+  const fundo = document.createElement('canvas');
+  const fctx = fundo.getContext('2d');
   const pinta = (img, alfa) => {
-    const s = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
-    const w = img.naturalWidth * s, h = img.naturalHeight * s;
+    const cw = canvas.width, ch = canvas.height, iw = img.naturalWidth, ih = img.naturalHeight;
+    const s = Math.min(Math.max(cw / iw, ch / ih), cw / (.45 * iw));
+    const w = iw * s, h = ih * s;
+    let y = (ch - h) / 2;
     ctx.globalAlpha = alfa;
-    ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+    if (h < ch) {
+      y = Math.min(Math.max(ch * .4 - h / 2, 0), ch - h);
+      const fs = Math.max(fundo.width / iw, fundo.height / ih);
+      fctx.drawImage(img, (fundo.width - iw * fs) / 2, (fundo.height - ih * fs) / 2, iw * fs, ih * fs);
+      ctx.drawImage(fundo, 0, 0, cw, ch);
+      ctx.fillStyle = 'rgba(14,16,19,.35)';
+      ctx.fillRect(0, 0, cw, ch);
+    }
+    ctx.drawImage(img, (cw - w) / 2, y, w, h);
   };
   // quadro ainda não chegou: usa o carregado mais próximo
   const maisPerto = i => {
@@ -104,6 +118,8 @@
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(palco.clientWidth * dpr);
     canvas.height = Math.round(palco.clientHeight * dpr);
+    fundo.width = 32;
+    fundo.height = Math.max(1, Math.round(32 * canvas.height / canvas.width));
     ctx.imageSmoothingQuality = 'high';
     desenha();
     mira();
