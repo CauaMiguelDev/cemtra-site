@@ -4,11 +4,9 @@ Site institucional da CEMTRA (Centro Especializado em Medicina do Trabalho), em 
 
 **Site no ar:** https://cauamigueldev.github.io/cemtra-site/
 
-**Demo da animação de rolagem:** https://cauamigueldev.github.io/cemtra-site/animacao-scroll/
-
 ## Rodar localmente
 
-A animação do hero carrega 300 quadros com `fetch`, então é preciso servir a pasta por HTTP. Abrir o `index.html` direto pelo navegador (`file://`) bloqueia o carregamento dos quadros.
+Sirva a pasta por HTTP (algumas fontes e recursos não carregam abrindo o `index.html` direto pelo navegador):
 
 ```bash
 python -m http.server 8000
@@ -20,12 +18,9 @@ Depois abra http://localhost:8000
 
 - `index.html`: página única (hero, serviços, unidades, perguntas frequentes e contato).
 - `styles.css`: estilos do site.
-- `main.js`: interações, revelações e navegação.
-- `hero-tour.js`: animação do hero em sequência de quadros, decodificada numa Web Worker.
-- `animacao-scroll/`: demo independente da animação de rolagem. Usa os mesmos quadros do hero (`assets/tour/frames`) e a mesma fonte local.
-- `assets/`: imagens, fontes, quadros do hero e bibliotecas em `vendor/` (GSAP, ScrollTrigger, SplitText e Lenis).
-  - `tour/frames`: 300 quadros 1600×900, usados em tela de computador e tablet.
-  - `tour/frames-celular`: os mesmos quadros recortados na faixa central (720×900), usados em celular na vertical. Mostram o mesmo conteúdo com cerca da metade dos bytes.
+- `main.js`: interações, animações (GSAP) e navegação. O hero tem uma entrada animada: o sol nasce, a fachada sobe dentro do arco, o título sobe palavra a palavra e a nota do Google conta até 4,8.
+- `assets/`: imagens, fontes e bibliotecas em `vendor/` (GSAP, ScrollTrigger, SplitText e Lenis).
+  - `img/fachada.webp` e `img/recepcao.webp`: fachada e recepção da matriz, usadas no hero.
 
 ## Publicação
 

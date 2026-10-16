@@ -466,6 +466,9 @@
   /* ---------- sem bibliotecas ou com movimento reduzido ---------- */
   const flut = $('.flutuante');
   const barraMovel = $('.barra-movel');
+  // a barra de baixo do celular some enquanto os botões do hero estão na tela (não duplica nem cobre o "Agendar")
+  const acoesHero = $('[data-hero-acoes]');
+  if (barraMovel && acoesHero && 'IntersectionObserver' in window) new IntersectionObserver(([e]) => barraMovel.classList.toggle('no-hero', e.isIntersecting)).observe(acoesHero);
   if (!temGsap || reduz) {
     html.classList.remove('carregando', 'intro');
     const ioNav = new IntersectionObserver(ents => ents.forEach(e => { if (e.isIntersecting) defineAtual(e.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
@@ -535,7 +538,56 @@
 
   /* ---------- hero: entrada (cortina na primeira visita da sessão) ---------- */
   const quebra = (alvo, tipo = 'lines,words') => window.SplitText ? SplitText.create(alvo, { type: tipo, mask: 'lines', linesClass: 'linha' }) : null;
-  const comecaHero = () => html.classList.remove('carregando');
+  // o sol nasce, a fachada sobe dentro do arco, o título sobe palavra a palavra e a prova chega em vidro
+  const hero = $('[data-hero]');
+  const entradaHero = hero ? (() => {
+    const titulo = $('[data-hero-titulo]', hero);
+    const sp = quebra(titulo);
+    const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' }, onComplete: vivaHero });
+    tl.fromTo('[data-hero-sol]', { opacity: 0, scale: .5, yPercent: 35 }, { opacity: 1, scale: 1, yPercent: 0, duration: 2 }, 0)
+      .fromTo('[data-hero-arco]', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.2 }, .1)
+      .fromTo('[data-hero-arco] img', { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.28 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1.7, ease: 'expo.inOut' }, .2)
+      .fromTo(titulo, { opacity: 0 }, { opacity: 1, duration: .01 }, .25)
+      .fromTo(sp ? sp.words : titulo, { yPercent: 115, rotate: 5 }, { yPercent: 0, rotate: 0, duration: 1.25, stagger: .07 }, .25)
+      .fromTo('[data-hero-item]', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 1.1, stagger: .12 }, .75)
+      .fromTo('[data-hero-chip]', { opacity: 0, scale: .6, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 1.1, stagger: .15, ease: 'back.out(1.6)' }, 1.05)
+      .fromTo('[data-hero-azulejo]', { opacity: 0, rotation: -180, scale: .4 }, { opacity: 1, rotation: 0, scale: 1, duration: 1.3, ease: 'back.out(1.4)' }, 1.2);
+    // os números da prova contam enquanto os chips chegam
+    $$('[data-hero-conta]', hero).forEach(n => {
+      const casas = +n.dataset.casas || 0, obj = { v: 0 };
+      const fmt = v => casas ? v.toFixed(casas).replace('.', ',') : Math.round(v).toLocaleString('pt-BR');
+      n.textContent = fmt(0);
+      tl.to(obj, { v: +n.dataset.heroConta, duration: 1.9, onUpdate: () => { n.textContent = fmt(obj.v); } }, 1.15);
+    });
+    // ao rolar, o palco sobe mais devagar que o texto
+    if (!leve) gsap.to('[data-hero-palco]', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    if (!leve) gsap.to('.hero__colunata', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    return tl;
+  })() : null;
+  // depois da entrada: o botão principal chama, os chips flutuam, o sol respira, o azulejo gira e o palco segue o cursor
+  function vivaHero() {
+    const botao = $('.hero__agendar', hero);
+    if (botao) botao.classList.add('chama');
+    // os laços param quando o hero sai da tela (a órbita em CSS também, pela classe "parado")
+    const lacos = leve ? [] : [
+      ...$$('[data-hero-chip]', hero).map((c, i) => gsap.to(c, { yPercent: i % 2 ? 7 : -7, duration: 3.2 + i * .7, ease: 'sine.inOut', yoyo: true, repeat: -1 })),
+      gsap.to('[data-hero-sol]', { scale: 1.04, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1 }),
+      gsap.to('[data-hero-azulejo]', { rotation: '+=90', duration: 1, ease: 'back.out(1.8)', repeat: -1, repeatDelay: 3.5 })
+    ];
+    ScrollTrigger.create({ trigger: hero, start: 'top bottom', end: 'bottom top', onToggle: s => { lacos.forEach(t => s.isActive ? t.resume() : t.pause()); hero.classList.toggle('parado', !s.isActive); } });
+    if (leve || !fino) return;
+    const camadas = $$('[data-prof]', hero).map(el => ({ p: +el.dataset.prof, x: gsap.quickTo(el, 'x', { duration: 1.2, ease: 'power3' }), y: gsap.quickTo(el, 'y', { duration: 1.2, ease: 'power3' }) }));
+    const sol = $('[data-hero-sol]', hero);
+    const solX = gsap.quickTo(sol, 'x', { duration: 1.6, ease: 'power3' }), solY = gsap.quickTo(sol, 'y', { duration: 1.6, ease: 'power3' });
+    hero.addEventListener('pointermove', e => {
+      const r = hero.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width - .5, ny = (e.clientY - r.top) / r.height - .5;
+      camadas.forEach(c => { c.x(nx * c.p); c.y(ny * c.p); });
+      solX(-nx * 18); solY(-ny * 18);
+    });
+    hero.addEventListener('pointerleave', () => { camadas.forEach(c => { c.x(0); c.y(0); }); solX(0); solY(0); });
+  }
+  const comecaHero = () => { html.classList.remove('carregando'); if (entradaHero) entradaHero.play(); };
   const cortina = $('.cortina');
   if (html.classList.contains('intro') && cortina && scrollY < 40) {
     (window.cemtraT || []).forEach(clearTimeout); // a cortina agora cuida da própria saída
