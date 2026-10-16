@@ -561,7 +561,6 @@
     });
     // ao rolar, o palco sobe mais devagar que o texto
     if (!leve) gsap.to('[data-hero-palco]', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    if (!leve) gsap.to('.hero__colunata', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
     return tl;
   })() : null;
   // depois da entrada: o botão principal chama, os chips flutuam, o sol respira, o azulejo gira e o palco segue o cursor
