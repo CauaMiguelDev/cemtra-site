@@ -803,7 +803,7 @@ strong, b { font-weight: 750; }
 
 /* ---------- hero: a fachada real num arco, sob o sol de Brasília ----------
    A foto da clínica fica num arco (como os palácios de Brasília), com um sol laranja nascendo atrás e a prova
-   em vidro ao redor: nota no Google, endereço com o horário ao vivo e a recepção numa cúpula com órbita. */
+   em vidro ao redor: nota no Google, endereço com o horário ao vivo e a otoscopia numa cúpula com órbita. */
 .hero {
   position: relative; overflow: clip; min-height: 100svh; display: grid; align-items: center;
   padding: calc(var(--nav-h) + clamp(28px, 6vh, 72px)) 0 clamp(56px, 9vh, 104px);
@@ -815,8 +815,11 @@ strong, b { font-weight: 750; }
 .hero__titulo em { font-style: normal; color: var(--sol-texto); }
 .hero__lead { max-width: 50ch; font-size: clamp(1.0625rem, 1.3vw, 1.1875rem); color: var(--tinta-2); text-wrap: pretty; }
 .hero__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
-.hero__orcamento .i { transition: transform .45s var(--ease); }
-.hero__orcamento:hover .i, .hero__orcamento:focus-visible .i { transform: translateX(5px); }
+/* botão secundário: a seta sai pela direita e volta pela esquerda */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__orcamento:hover .i, .hero__orcamento:focus-visible .i { animation: seta .65s var(--ease); }
+}
+@keyframes seta { 40% { transform: translateX(16px); opacity: 0; } 41% { transform: translateX(-16px); opacity: 0; } }
 /* botão principal: quando a entrada termina, um brilho atravessa o botão e o círculo do WhatsApp chama duas vezes */
 .hero__agendar .botao__ico { position: relative; }
 .hero__agendar .botao__ico::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--sol); opacity: 0; pointer-events: none; }
@@ -833,7 +836,7 @@ strong, b { font-weight: 750; }
 .hero__fatos a { color: var(--tinta); text-decoration: underline; text-decoration-color: var(--sol); text-decoration-thickness: 2px; text-underline-offset: 5px; transition: color .3s ease; }
 .hero__fatos a:hover { color: var(--sol-texto); }
 
-/* palco: sol, arco com a fachada, cúpula da recepção, chips de vidro e um azulejo */
+/* palco: sol, arco com a fachada (e o exame no verso do brise), cúpula da otoscopia e chips de vidro */
 .hero__palco { position: relative; justify-self: center; width: min(100%, 460px); aspect-ratio: 4 / 5; margin-block: clamp(20px, 4vh, 44px); }
 .hero__sol {
   /* centro a 50% da largura e 44% da altura do arco (só left/top: o GSAP anima o transform) */
@@ -845,7 +848,20 @@ strong, b { font-weight: 750; }
   border-radius: 999px 999px var(--r-lg) var(--r-lg);
   box-shadow: 0 0 0 10px rgba(255,255,255,.5), 0 50px 90px -40px rgba(120,45,5,.55);
 }
-.hero__arco img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+/* um leve zoom ancorado no letreiro corta a calçada da foto (o brise usa o mesmo corte) */
+.hero__arco img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transform-origin: 50% 22%; }
+/* brise-soleil: lâminas verticais, como os quebra-sóis de Brasília, que giram para trocar a fachada pelo exame */
+/* atrás das lâminas, a sombra quente de um interior iluminado pelo sol (o que aparece nos vãos quando elas giram) */
+.hero__brise { display: none; position: absolute; inset: 0; perspective: 1600px; background: linear-gradient(170deg, rgb(120,45,5), var(--noite) 62%); }
+.hero__lamina { position: absolute; top: 0; bottom: 0; transform-style: preserve-3d; }
+.hero__face { position: absolute; inset: 0; background: var(--noite) no-repeat; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.hero__face--verso { transform: rotateY(180deg); visibility: hidden; }
+.hero__lamina.virada > .hero__face { visibility: hidden; }
+.hero__lamina.virada > .hero__face--verso { visibility: visible; }
+/* a lâmina escurece ao ficar de lado (--l vai de 0, de frente, a 1, de perfil) */
+.hero__face::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14,16,19,.75), rgba(14,16,19,.25)); opacity: var(--l, 0); }
+.hero__arco.com-brise > img { visibility: hidden; }
+.hero__arco.com-brise > .hero__brise { display: block; }
 .hero__cupula { position: absolute; z-index: 3; left: -15%; bottom: 7%; width: 34%; aspect-ratio: 1; }
 .hero__cupula img { position: absolute; inset: 10%; width: 80%; height: 80%; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 6px rgba(255,255,255,.8), 0 24px 44px -18px rgba(120,45,5,.55); }
 .hero__orbita { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -865,11 +881,10 @@ strong, b { font-weight: 750; }
 .hero__chip--local { right: -11%; bottom: 15%; }
 .hero__chip--local strong { display: block; font-size: .975rem; }
 .hero__status { margin-top: 4px; color: var(--tinta-2); }
-.hero__azulejo { position: absolute; z-index: 2; right: -14%; top: -2%; width: 18%; aspect-ratio: 1; box-shadow: 0 18px 34px -16px rgba(120,45,5,.55); }
 
 /* a entrada só esconde o que vai animar enquanto o JS prepara a coreografia (sem JS, tudo aparece) */
 .js.carregando .hero__titulo, .js.carregando [data-hero-item], .js.carregando [data-hero-chip],
-.js.carregando .hero__sol, .js.carregando .hero__arco, .js.carregando .hero__azulejo { opacity: 0; }
+.js.carregando .hero__sol, .js.carregando .hero__arco { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .hero__orbita { animation: girasol 46s linear infinite; }
 }
@@ -896,7 +911,8 @@ strong, b { font-weight: 750; }
   .hero__acoes { width: 100%; flex-direction: column; }
   .hero__acoes .botao { width: 100%; }
   .hero__fatos { gap: 10px 18px; font-size: .875rem; }
-  .hero__palco { width: min(100%, 60vw, 270px); }
+  .hero__palco { width: min(100%, 74vw, 290px); }
+  .hero__chip--nota { left: -15%; }
   .hero__chip { gap: 10px; padding: 9px 14px 9px 9px; border-radius: var(--r-sm); }
   .hero__chip--nota { padding-left: 12px; }
   .hero__chip--nota .hero__nota-texto { max-width: 8.5em; }
