@@ -565,7 +565,7 @@ strong, b { font-weight: 750; }
 .pino.ativo .pino__rotulo { background: var(--tinta); color: var(--branco); }
 .pino.ativo .pino__ponto { background: var(--sol); scale: 1.25; }
 .pino.ativo .pino__ponto::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--sol); animation: radar 2s ease-out infinite; }
-@keyframes radar { to { inset: -22px; opacity: 0; } }
+@keyframes radar { to { transform: scale(2.4); opacity: 0; } }
 .unidades__painel { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .unidades__abas { display: flex; flex-wrap: wrap; gap: 8px; }
 .aba {
@@ -797,6 +797,7 @@ strong, b { font-weight: 750; }
 /* ---------- modo leve: PC e celular fraco (ativado em main/head por classe no <html>) ---------- */
 .leve *, .leve *::before, .leve *::after { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; will-change: auto !important; }
 .leve .grao { display: none; }
+.leve .status.aberto::before, .leve .pino.ativo .pino__ponto::after, .leve .hero__orbita { animation: none; }
 .leve .vidro { background: rgba(255,255,255,.95); }
 .leve .vidro-noite { background: #1A1D22; }
 .leve .botao--vidro { background: rgba(255,255,255,.92); }
