@@ -848,8 +848,7 @@ strong, b { font-weight: 750; }
   border-radius: 999px 999px var(--r-lg) var(--r-lg);
   box-shadow: 0 0 0 10px rgba(255,255,255,.5), 0 50px 90px -40px rgba(120,45,5,.55);
 }
-/* um leve zoom ancorado no letreiro corta a calçada da foto (o brise usa o mesmo corte) */
-.hero__arco img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transform-origin: 50% 22%; }
+.hero__arco img { display: block; width: 100%; height: 100%; object-fit: cover; }
 /* brise-soleil: lâminas verticais, como os quebra-sóis de Brasília, que giram para trocar a fachada pelo exame */
 /* atrás das lâminas, a sombra quente de um interior iluminado pelo sol (o que aparece nos vãos quando elas giram) */
 .hero__brise { display: none; position: absolute; inset: 0; perspective: 1600px; background: linear-gradient(170deg, rgb(120,45,5), var(--noite) 62%); }
@@ -898,10 +897,10 @@ strong, b { font-weight: 750; }
   .hero__texto { display: contents; }
   .hero__titulo { order: 1; max-width: 13ch; }
   .hero__palco { order: 2; width: min(62vw, 400px); margin-block: clamp(40px, 7vw, 56px) 22px; }
-  /* em uma coluna a prova fica nas laterais: topo do arco, placa e porta livres */
-  .hero__chip--nota { left: -22%; top: 40%; }
+  /* em uma coluna a prova fica nas laterais, abaixo do letreiro (que ocupa de 29% a 49% da altura da foto) */
+  .hero__chip--nota { left: -22%; top: 56%; }
   .hero__chip--local { right: -12%; bottom: -9%; }
-  .hero__cupula { left: auto; right: -15%; bottom: auto; top: 32%; width: 28%; }
+  .hero__cupula { left: auto; right: -15%; bottom: auto; top: 52%; width: 28%; }
   .hero__lead { order: 3; }
   .hero__acoes { order: 4; }
   .hero__fatos { order: 5; }

@@ -554,7 +554,7 @@
     tl.fromTo('[data-hero-sol]', { opacity: 0, scale: .5, yPercent: 35 }, { opacity: 1, scale: 1, yPercent: 0, duration: 2 }, 0)
       .fromTo('[data-hero-arco]', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.2 }, .1);
     if (brise) tl.fromTo(brise, { rotationY: -90 }, { rotationY: 0, duration: 1.6, stagger: { each: .07, from: 'center' } }, .3);
-    else tl.fromTo('[data-hero-arco] img', { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.28 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1.12, duration: 1.7, ease: 'expo.inOut' }, .2);
+    else tl.fromTo('[data-hero-arco] img', { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.28 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1.7, ease: 'expo.inOut' }, .2);
     tl.fromTo(titulo, { opacity: 0 }, { opacity: 1, duration: .01 }, .25)
       .fromTo(palavras, { yPercent: 115, rotate: 5 }, { yPercent: 0, rotate: 0, duration: 1.25, stagger: .07 }, .25);
     if (ultima) {
@@ -593,16 +593,12 @@
       [...l.children].forEach((f, k) => { f.style.backgroundImage = `url("${fotos[k]}")`; });
       return caixa.appendChild(l);
     });
-    // a fachada leva o mesmo zoom de 1.12 da foto (corta a calçada); o exame entra inteiro
+    // as duas fotos são 4:5, como o arco: cada lâmina mostra a sua faixa vertical delas
     const encaixa = () => {
       const W = arco.clientWidth, H = arco.clientHeight, w = W / N;
       laminas.forEach((l, i) => {
         l.style.left = i * w + 'px'; l.style.width = w + 1 + 'px';
-        [[1.12, .22], [1, .5]].forEach(([z, oy], k) => {
-          const f = l.children[k];
-          f.style.backgroundSize = `${W * z}px ${H * z}px`;
-          f.style.backgroundPosition = `${-i * w - (W * z - W) / 2}px ${-(H * z - H) * oy}px`;
-        });
+        [...l.children].forEach(f => { f.style.backgroundSize = `${W}px ${H}px`; f.style.backgroundPosition = `${-i * w}px 0`; });
       });
     };
     encaixa();
