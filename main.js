@@ -560,9 +560,8 @@
 
   /* ---------- hero: entrada (cortina na primeira visita da sessão) ---------- */
   const quebra = (alvo, tipo = 'lines,words') => window.SplitText ? SplitText.create(alvo, { type: tipo, mask: 'lines', linesClass: 'linha' }) : null;
-  // o sol nasce, o brise do arco se abre sobre a fachada, o título sobe palavra a palavra e a prova chega em vidro
+  // o sol nasce, a fachada sobe dentro do arco, o título sobe palavra a palavra e a prova chega em vidro
   const hero = $('[data-hero]');
-  const brise = hero && !leve ? montaBrise($('[data-hero-arco]', hero)) : null;
   const entradaHero = hero ? (() => {
     const titulo = $('[data-hero-titulo]', hero);
     // a última palavra do título passa pelos programas e para no eSocial: "do exame ao PCMSO, PGR, LTCAT... eSocial"
@@ -575,9 +574,8 @@
     const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' }, onComplete: vivaHero });
     tl.fromTo('[data-hero-sol]', { opacity: 0, scale: .5, yPercent: 35 }, { opacity: 1, scale: 1, yPercent: 0, duration: 2 }, 0)
       .fromTo('[data-hero-arco]', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.2 }, .1);
-    if (brise) tl.fromTo(brise, { rotationY: -90 }, { rotationY: 0, duration: 1.6, stagger: { each: .07, from: 'center' } }, .3);
-    else tl.fromTo('[data-hero-arco] img', { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.28 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1.7, ease: 'expo.inOut' }, .2);
-    tl.fromTo(titulo, { opacity: 0 }, { opacity: 1, duration: .01 }, .25)
+    tl.fromTo('[data-hero-arco] img', { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.28 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1.7, ease: 'expo.inOut' }, .2)
+      .fromTo(titulo, { opacity: 0 }, { opacity: 1, duration: .01 }, .25)
       .fromTo(palavras, { yPercent: 115, rotate: 5 }, { yPercent: 0, rotate: 0, duration: 1.25, stagger: .07 }, .25);
     if (ultima) {
       let t = .25 + palavras.length * .07;
@@ -600,43 +598,9 @@
     });
     // ao rolar, o palco sobe mais devagar que o texto
     if (!leve) gsap.to('[data-hero-palco]', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    if (brise) gsap.ticker.add(sombreia);
     return tl;
   })() : null;
-  // brise-soleil: o arco vira um quebra-sol de lâminas; a frente de cada lâmina é uma faixa da fachada, o verso uma faixa do exame
-  function montaBrise(arco) {
-    const caixa = arco && $('[data-hero-brise]', arco), foto = arco && $('img', arco);
-    if (!caixa || !foto) return null;
-    const N = 9, fotos = [foto.currentSrc || foto.src, caixa.dataset.verso];
-    const laminas = Array.from({ length: N }, () => {
-      const l = document.createElement('span');
-      l.className = 'hero__lamina';
-      l.innerHTML = '<span class="hero__face"></span><span class="hero__face hero__face--verso"></span>';
-      [...l.children].forEach((f, k) => { f.style.backgroundImage = `url("${fotos[k]}")`; });
-      return caixa.appendChild(l);
-    });
-    // as duas fotos são 4:5, como o arco: cada lâmina mostra a sua faixa vertical delas
-    const encaixa = () => {
-      const W = arco.clientWidth, H = arco.clientHeight, w = W / N;
-      laminas.forEach((l, i) => {
-        l.style.left = i * w + 'px'; l.style.width = w + 1 + 'px';
-        [...l.children].forEach(f => { f.style.backgroundSize = `${W}px ${H}px`; f.style.backgroundPosition = `${-i * w}px 0`; });
-      });
-    };
-    encaixa();
-    if ('ResizeObserver' in window) new ResizeObserver(encaixa).observe(arco);
-    arco.classList.add('com-brise');
-    return laminas;
-  }
-  // a lâmina escurece quando fica de perfil e mostra o verso quando passa de 90° (só escreve no DOM quando muda)
-  function sombreia() {
-    brise.forEach(l => {
-      const a = gsap.getProperty(l, 'rotationY') * Math.PI / 180, v = Math.abs(Math.sin(a)).toFixed(2), virada = Math.cos(a) < 0;
-      if (l._l !== v) { l._l = v; l.style.setProperty('--l', v); }
-      if (l._v !== virada) { l._v = virada; l.classList.toggle('virada', virada); }
-    });
-  }
-  // depois da entrada: o botão principal chama, os chips flutuam, o sol respira, o brise gira e o palco segue o cursor
+  // depois da entrada: o botão principal chama, os chips flutuam, o sol respira e o palco segue o cursor
   function vivaHero() {
     const botao = $('.hero__agendar', hero);
     if (botao) botao.classList.add('chama');
@@ -645,32 +609,8 @@
       ...$$('[data-hero-chip]', hero).map((c, i) => gsap.to(c, { yPercent: i % 2 ? 7 : -7, duration: 3.2 + i * .7, ease: 'sine.inOut', yoyo: true, repeat: -1 })),
       gsap.to('[data-hero-sol]', { scale: 1.04, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1 })
     ];
-    // a cada 6,5 s as lâminas giram em onda, da esquerda para a direita, e trocam a fachada pelo exame (e de volta)
-    let base = 0, sobre = false;
-    const gira = brise ? brise.map(l => gsap.quickTo(l, 'rotationY', { duration: .95, ease: 'power3.out' })) : [];
-    if (brise) {
-      const ciclo = gsap.delayedCall(6.5, () => {
-        if (!sobre) { base += 180; gira.forEach((g, i) => gsap.delayedCall(i * .06, () => g(base))); }
-        ciclo.restart(true);
-      });
-      lacos.push(ciclo);
-    }
-    ScrollTrigger.create({ trigger: hero, start: 'top bottom', end: 'bottom top', onToggle: s => {
-      lacos.forEach(t => s.isActive ? t.resume() : t.pause());
-      hero.classList.toggle('parado', !s.isActive);
-      if (brise) s.isActive ? gsap.ticker.add(sombreia) : gsap.ticker.remove(sombreia);
-    } });
+    ScrollTrigger.create({ trigger: hero, start: 'top bottom', end: 'bottom top', onToggle: s => { lacos.forEach(t => s.isActive ? t.resume() : t.pause()); hero.classList.toggle('parado', !s.isActive); } });
     if (leve || !fino) return;
-    // com o mouse sobre o arco, as lâminas perto do cursor viram e deixam espiar a outra foto
-    const arco = $('[data-hero-arco]', hero);
-    if (brise) {
-      arco.addEventListener('pointermove', e => {
-        sobre = true;
-        const r = arco.getBoundingClientRect(), p = (e.clientX - r.left) / r.width;
-        gira.forEach((g, i) => { const d = ((i + .5) / gira.length - p) / .17; g(base + 180 * Math.exp(-d * d)); });
-      });
-      arco.addEventListener('pointerleave', () => { sobre = false; gira.forEach(g => g(base)); });
-    }
     const camadas = $$('[data-prof]', hero).map(el => ({ p: +el.dataset.prof, x: gsap.quickTo(el, 'x', { duration: 1.2, ease: 'power3' }), y: gsap.quickTo(el, 'y', { duration: 1.2, ease: 'power3' }) }));
     const sol = $('[data-hero-sol]', hero);
     const solX = gsap.quickTo(sol, 'x', { duration: 1.6, ease: 'power3' }), solY = gsap.quickTo(sol, 'y', { duration: 1.6, ease: 'power3' });

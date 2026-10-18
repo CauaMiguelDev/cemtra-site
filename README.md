@@ -18,10 +18,10 @@ Depois abra http://localhost:8000
 
 - `index.html`: página única (hero, serviços, unidades, perguntas frequentes e contato).
 - `styles.css`: estilos do site.
-- `main.js`: interações, animações (GSAP) e navegação. O hero tem uma entrada animada: o sol nasce, as lâminas do brise-soleil se abrem sobre a fachada, o título sobe palavra a palavra (a última passa por PCMSO, PGR e LTCAT até o eSocial) e a nota do Google conta até 4,8. Depois as lâminas giram em onda e mostram a foto do exame.
+- `main.js`: interações, animações (GSAP) e navegação. O hero tem uma entrada animada: o sol nasce, a fachada sobe dentro do arco, o título sobe palavra a palavra (a última passa por PCMSO, PGR e LTCAT até o eSocial) e a nota do Google conta até 4,8.
 - `assets/`: imagens, fontes e bibliotecas em `vendor/` (GSAP, ScrollTrigger, SplitText e Lenis).
   - `img/fachada.webp`: fachada da matriz, no arco do hero.
-  - `img/exame.webp` e `img/otoscopia.webp`: fotos ilustrativas do Pexels (licença livre), no verso do brise e na cúpula do hero. Cada imagem tem um `.json` com a origem.
+  - `img/otoscopia.webp`: foto ilustrativa do Pexels (licença livre), na cúpula do hero. Cada imagem tem um `.json` com a origem.
 
 ## Publicação
 
