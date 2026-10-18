@@ -39,6 +39,10 @@
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 110px; scrollbar-color: #C3C7CD var(--concreto); }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
+/* sem a rolagem do Lenis (antes de carregar ou se falhar), as âncoras rolam suave pelo navegador */
+@media (prefers-reduced-motion: no-preference) { html:not(.lenis) { scroll-behavior: smooth; } }
+/* seções que recebem foco ao chegar por âncora não ganham anel */
+[tabindex="-1"]:focus { outline: none; }
 body {
   margin: 0; min-width: 320px;
   font-family: var(--fonte); font-size: 1.0625rem; font-weight: 500; line-height: 1.6;

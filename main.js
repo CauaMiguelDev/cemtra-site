@@ -501,9 +501,27 @@
     gsap.ticker.add(t => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
   }
+  // acelera e freia devagar (seno): sem o salto inicial de uma curva só de saída; quanto mais longe, mais tempo (0,9 a 1,8 s)
   const rolaPara = (alvo, offset = -96) => {
-    if (lenis) lenis.scrollTo(alvo, { offset, duration: 1.5, easing: t => 1 - Math.pow(1 - t, 4) });
-    else (typeof alvo === 'number' ? scrollTo({ top: alvo, behavior: 'smooth' }) : alvo.scrollIntoView({ behavior: 'smooth' }));
+    if (!lenis) return typeof alvo === 'number' ? scrollTo({ top: alvo, behavior: 'smooth' }) : alvo.scrollIntoView({ behavior: 'smooth' });
+    const destino = typeof alvo === 'number' ? alvo : alvo.getBoundingClientRect().top + lenis.scroll + offset;
+    adianta(destino);
+    const duration = Math.min(1.8, Math.max(.9, .7 + Math.abs(destino - lenis.scroll) / 9000));
+    lenis.scrollTo(alvo, { offset, duration, easing: t => (1 - Math.cos(Math.PI * t)) / 2 });
+  };
+
+  // descendo por âncora, as entradas das seções que passam voando (acima de onde a página vai parar) terminam já no clique:
+  // nada começa a animar no meio do voo (eram os quadros lentos em aparelho fraco) e o destino ainda anima ao chegar
+  const adianta = destino => {
+    const y = lenis.scroll;
+    if (destino - y < innerHeight) return;
+    const passam = ScrollTrigger.getAll().filter(st => !st.vars.scrub && !st.pin && st.trigger && st.start > y && st.start < destino
+      && st.trigger.getBoundingClientRect().bottom + y < destino && (st.animation || st.trigger.hasAttribute('data-card')));
+    passam.forEach(st => {
+      if (st.animation) st.animation.progress(1);
+      else gsap.set(st.trigger, { clearProps: 'transform,opacity' });
+      st.kill();
+    });
   };
 
   // âncoras internas pela rolagem suave
@@ -514,8 +532,12 @@
     const alvo = id === '#inicio' ? 0 : $(id);
     if (alvo === null) return;
     e.preventDefault();
-    if (a.dataset.irServico) return irParaServico(a.dataset.irServico);
-    rolaPara(alvo);
+    if (a.dataset.irServico) irParaServico(a.dataset.irServico);
+    else rolaPara(alvo);
+    // como na âncora nativa, o próximo Tab continua de onde a página chegou (e o "Pular para o conteúdo" funciona)
+    const foco = alvo || $('#inicio');
+    if (!foco.hasAttribute('tabindex')) foco.setAttribute('tabindex', '-1');
+    foco.focus({ preventScroll: true });
   });
 
   // topo: compacto, some ao descer, volta ao subir, progresso da página
