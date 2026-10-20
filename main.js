@@ -457,11 +457,22 @@
     if (!mega.hidden) fechaMega(true);
   });
 
-  // dúvida "o que levar": abre o item antes de rolar até ele
-  $$('[data-abrir-duvida]').forEach(a => a.addEventListener('click', () => {
-    const d = $(a.getAttribute('href'));
-    if (d) d.open = true;
-  }));
+  // link para uma dúvida (como "O que levar no dia") abre a resposta antes de rolar até ela; vale também para o endereço.
+  // Abre sem a transição de altura: a dúvida que estava aberta acima fecharia em 0,5 s e empurraria o destino para cima
+  const abreDuvida = d => {
+    const faq = d.closest('.faq');
+    if (faq) faq.classList.add('sem-transicao');
+    d.open = true;
+    if (faq) requestAnimationFrame(() => requestAnimationFrame(() => faq.classList.remove('sem-transicao')));
+  };
+  const idDoEndereco = (() => { try { return decodeURIComponent(location.hash.slice(1)); } catch (e) { return ''; } })();
+  const duvidaDoEndereco = idDoEndereco && document.getElementById(idDoEndereco);
+  if (duvidaDoEndereco && duvidaDoEndereco.tagName === 'DETAILS') abreDuvida(duvidaDoEndereco);
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]'), id = a && a.getAttribute('href');
+    const d = id && id.length > 1 && $(id);
+    if (d && d.tagName === 'DETAILS') abreDuvida(d);
+  });
 
   /* ---------- sem bibliotecas ou com movimento reduzido ---------- */
   const flut = $('.flutuante');
@@ -501,14 +512,26 @@
     gsap.ticker.add(t => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
   }
+  // onde a página para: o título da seção (ou a pergunta da dúvida) 24px abaixo da barra do topo.
+  // Mede pela posição de layout (offsetTop), não pelo getBoundingClientRect: cartões que ainda vão entrar estão
+  // deslocados 70px e inclinados, e era isso que fazia "O que levar no dia" parar com a pergunta escondida.
+  const topoDoc = el => { let y = 0; for (let e = el.closest('.pin-spacer') || el; e; e = e.offsetParent) y += e.offsetTop; return y; };
+  const destinoDe = alvo => {
+    if (typeof alvo === 'number') return alvo;
+    if (alvo.closest('.pin-spacer')) return topoDoc(alvo); // seção fixada (serviços): para no começo do palco, que ocupa a tela
+    const respiro = alvo.matches('section, main') ? parseFloat(getComputedStyle(alvo).paddingTop) : 0;
+    return Math.max(0, topoDoc(alvo) + respiro - (nav.offsetHeight + 24));
+  };
   // acelera e freia devagar (seno): sem o salto inicial de uma curva só de saída; quanto mais longe, mais tempo (0,9 a 1,8 s)
-  const rolaPara = (alvo, offset = -96) => {
-    if (!lenis) return typeof alvo === 'number' ? scrollTo({ top: alvo, behavior: 'smooth' }) : alvo.scrollIntoView({ behavior: 'smooth' });
-    const destino = typeof alvo === 'number' ? alvo : alvo.getBoundingClientRect().top + lenis.scroll + offset;
+  const rolaPara = (alvo, aoChegar) => {
+    const destino = destinoDe(alvo);
+    if (!lenis) { scrollTo({ top: destino, behavior: 'smooth' }); return aoChegar && setTimeout(aoChegar, 900); }
     adianta(destino);
     const duration = Math.min(1.8, Math.max(.9, .7 + Math.abs(destino - lenis.scroll) / 9000));
-    lenis.scrollTo(alvo, { offset, duration, easing: t => (1 - Math.cos(Math.PI * t)) / 2 });
+    lenis.scrollTo(destino, { duration, easing: t => (1 - Math.cos(Math.PI * t)) / 2, onComplete: aoChegar });
   };
+  // ao chegar numa dúvida, um anel laranja pisca em volta dela para mostrar onde a página parou
+  const marca = el => () => { el.classList.remove('chegou'); void el.offsetWidth; el.classList.add('chegou'); setTimeout(() => el.classList.remove('chegou'), 1900); };
 
   // descendo por âncora, as entradas das seções que passam voando (acima de onde a página vai parar) terminam já no clique:
   // nada começa a animar no meio do voo (eram os quadros lentos em aparelho fraco) e o destino ainda anima ao chegar
@@ -533,7 +556,9 @@
     if (alvo === null) return;
     e.preventDefault();
     if (a.dataset.irServico) irParaServico(a.dataset.irServico);
-    else rolaPara(alvo);
+    else rolaPara(alvo, alvo && alvo.tagName === 'DETAILS' ? marca(alvo) : null);
+    // o endereço acompanha a seção (dá para copiar e mandar o link); o início volta ao endereço limpo
+    history.replaceState(null, '', id === '#inicio' ? location.pathname + location.search : id);
     // como na âncora nativa, o próximo Tab continua de onde a página chegou (e o "Pular para o conteúdo" funciona)
     const foco = alvo || $('#inicio');
     if (!foco.hasAttribute('tabindex')) foco.setAttribute('tabindex', '-1');
@@ -624,7 +649,7 @@
   }
   const comecaHero = () => { html.classList.remove('carregando'); if (entradaHero) entradaHero.play(); };
   const cortina = $('.cortina');
-  if (html.classList.contains('intro') && cortina && scrollY < 40) {
+  if (html.classList.contains('intro') && cortina && scrollY < 40 && !location.hash) {
     (window.cemtraT || []).forEach(clearTimeout); // a cortina agora cuida da própria saída
     if (lenis) lenis.stop();
     // a marca entra sobre o concreto; o sol nasce atrás dela e a cortina sobe para mostrar o hero
@@ -828,11 +853,9 @@
     const destaca = () => { card.classList.add('destaque'); setTimeout(() => card.classList.remove('destaque'), 2200); };
     if (panST) {
       const frac = Math.min(1, Math.max(0, (card.offsetLeft - (janela.clientWidth - card.offsetWidth) / 2) / (trilho.scrollWidth - janela.clientWidth)));
-      rolaPara(panST.start + frac * (panST.end - panST.start), 0);
-      setTimeout(destaca, 900);
+      rolaPara(panST.start + frac * (panST.end - panST.start), destaca);
     } else {
-      rolaPara($('#servicos'));
-      setTimeout(() => { janela.scrollTo({ left: card.offsetLeft - 20, behavior: 'smooth' }); destaca(); }, 700);
+      rolaPara($('#servicos'), () => { janela.scrollTo({ left: card.offsetLeft - 20, behavior: 'smooth' }); destaca(); });
     }
   };
 
@@ -846,6 +869,28 @@
 
   // recalcula depois das imagens e fontes
   addEventListener('load', () => ScrollTrigger.refresh());
+
+  // endereço com #seção (link compartilhado ou recarregado): a página abre parada na seção, já montada
+  const inicial = idDoEndereco && document.getElementById(idDoEndereco);
+  if (inicial) {
+    let pos = -1;
+    const vai = () => {
+      if (pos >= 0 && Math.abs(scrollY - pos) > 4) return; // a pessoa já rolou: não puxa de volta
+      ScrollTrigger.refresh();
+      pos = destinoDe(inicial);
+      lenis ? lenis.scrollTo(pos, { immediate: true, force: true }) : scrollTo(0, pos);
+    };
+    requestAnimationFrame(vai);
+    if (document.readyState !== 'complete') addEventListener('load', () => requestAnimationFrame(vai), { once: true });
+  }
+  // o # mudou sem recarregar (Voltar, link externo para outra seção): rola suave até lá, como um clique
+  addEventListener('hashchange', () => {
+    let id = ''; try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { /* # inválido: fica onde está */ }
+    const el = id && document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'DETAILS') abreDuvida(el);
+    rolaPara(id === 'inicio' ? 0 : el, el.tagName === 'DETAILS' ? marca(el) : null);
+  });
   };
   Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 1200))]).then(comeca);
 })();

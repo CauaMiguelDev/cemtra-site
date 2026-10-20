@@ -43,6 +43,10 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: no-preference) { html:not(.lenis) { scroll-behavior: smooth; } }
 /* seções que recebem foco ao chegar por âncora não ganham anel */
 [tabindex="-1"]:focus { outline: none; }
+/* chegada por link numa dúvida: um anel laranja aparece em volta dela e se dissolve para fora */
+.faq__item.chegou { animation: chegou 1.9s var(--ease); }
+.faq.sem-transicao .faq__item::details-content { transition: none; }
+@keyframes chegou { 0%, 40% { outline: 3px solid var(--sol); outline-offset: 4px; } 100% { outline: 3px solid transparent; outline-offset: 12px; } }
 body {
   margin: 0; min-width: 320px;
   font-family: var(--fonte); font-size: 1.0625rem; font-weight: 500; line-height: 1.6;
@@ -348,6 +352,8 @@ strong, b { font-weight: 750; }
 
 /* ---------- títulos e seções ---------- */
 .secao { position: relative; padding-block: var(--secao); }
+/* salto nativo (sem JS ou com movimento reduzido): o título para logo abaixo da barra, como na rolagem suave */
+.secao[id] { scroll-margin-top: calc(var(--secao) * -1); }
 .titulo-secao { font-size: clamp(2.2rem, 4.3vw, 3.9rem); line-height: 1.02; letter-spacing: -.04em; max-width: 17ch; }
 .secao__sub { margin-top: 18px; max-width: 54ch; font-size: clamp(1.0625rem, 1.3vw, 1.1875rem); color: var(--tinta-2); }
 
@@ -607,6 +613,9 @@ strong, b { font-weight: 750; }
 .faq__item[open] summary:hover .faq__ico { background: var(--sol-claro); }
 .faq__resp { padding: 0 26px 24px; }
 .faq__resp p { color: var(--tinta-2); }
+.faq__resp ul { margin: 6px 0 10px; padding-left: 1.25em; color: var(--tinta); font-weight: 650; }
+.faq__resp li + li { margin-top: 4px; }
+.faq__resp li::marker { color: var(--sol); }
 .faq__resp a { color: var(--sol-texto); font-weight: 750; }
 @supports (interpolate-size: allow-keywords) {
   .faq { interpolate-size: allow-keywords; }

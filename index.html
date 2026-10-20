@@ -18,7 +18,7 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preload" as="font" type="font/woff2" href="assets/fontes/urbanist-latin.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/fachada.webp?v=2" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=85">
+  <link rel="stylesheet" href="styles.css?v=89">
   <script>(function(h){h.classList.add('js','carregando');var q=location.search,fraco=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4;if(/leve=1/.test(q))fraco=true;if(/leve=0/.test(q))fraco=false;if(fraco)h.classList.add('leve');if('scrollRestoration' in history)history.scrollRestoration='manual';try{if(!sessionStorage.getItem('cemtra-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('intro');sessionStorage.setItem('cemtra-intro','1')}}catch(e){}window.cemtraT=[setTimeout(function(){h.classList.remove('carregando')},2600),setTimeout(function(){h.classList.remove('intro')},3200)]})(document.documentElement)</script>
   <script type="application/ld+json">
   {
@@ -286,7 +286,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <span class="ico-bloco"><svg class="i" aria-hidden="true"><use href="#d-brain"/></svg></span>
             <h3>Saúde mental no trabalho</h3>
             <p>Psiquiatria e psicologia ocupacional para prevenir estresse e burnout e acompanhar cada colaborador.</p>
-            <a class="link-seta link-seta--claro" href="#saude-mental">Saiba mais<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
+            <a class="link-seta link-seta--claro" href="#saude-mental">Ver como funciona<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
           </div>
         </article>
 
@@ -369,7 +369,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <a class="bento__cel bento__cel--mapa" href="#unidades" data-card>
           <svg class="bento__mapa" viewBox="0 0 1000 600" aria-hidden="true" data-mini-mapa></svg>
           <span class="bento__mapa-texto">
-            <strong><span data-conta="5">5</span> unidades no DF e entorno</strong>
+            <strong><span data-conta="5" aria-hidden="true">5</span><span class="sr-only">5</span> unidades no DF e entorno</strong>
             <span>Taguatinga, Asa Sul, Sobradinho, Águas Lindas e Santo Antônio do Descoberto.</span>
           </span>
           <span class="bento__seta"><svg class="i" aria-hidden="true"><use href="#b-arrow-up-right"/></svg></span>
@@ -567,7 +567,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <details class="vidro faq__item" name="faq" id="duvida-levar">
           <summary>O que o colaborador precisa levar no dia do exame?<span class="faq__ico" aria-hidden="true"><svg class="i i--sm"><use href="#b-plus"/></svg></span></summary>
           <!-- confirmar com o cliente: lista de documentos e preparos -->
-          <div class="faq__resp"><p>Um documento oficial com foto e o encaminhamento da empresa. Se houver exames complementares com preparo, a unidade informa no agendamento.</p></div>
+          <div class="faq__resp"><p>Leve no dia:</p><ul><li>um documento oficial com foto;</li><li>o encaminhamento da empresa.</li></ul><p>Se algum exame complementar pedir preparo, a unidade avisa no agendamento.</p></div>
         </details>
         <details class="vidro faq__item" name="faq">
           <summary>Qual o horário de atendimento?<span class="faq__ico" aria-hidden="true"><svg class="i i--sm"><use href="#b-plus"/></svg></span></summary>
@@ -741,6 +741,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
 <script src="assets/vendor/SplitText.min.js" defer></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
-<script src="main.js?v=62" defer></script>
+<script src="main.js?v=65" defer></script>
 </body>
 </html>
