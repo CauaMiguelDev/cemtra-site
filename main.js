@@ -810,33 +810,24 @@
   const barra = $('[data-servicos-barra]');
   let panST = null;
   const mm = gsap.matchMedia();
+  // o trilho segue a rolagem direto (o Lenis já suaviza): sem atraso extra, sem inclinar nem girar os cartões,
+  // que deixavam o carrossel torto e lento em computadores mais fracos
   if (!leve) mm.add('(min-width: 1025px)', () => {
     html.classList.add('pan');
-    let inclina = 0, inclinaAlvo = 0;
-    const inclinaTick = () => {
-      inclina += (inclinaAlvo - inclina) * .12;
-      inclinaAlvo *= .88;
-      if (Math.abs(inclina) > .02 || Math.abs(inclinaAlvo) > .02) gsap.set(cardsServ, { skewX: inclina });
-    };
-    if (!leve) gsap.ticker.add(inclinaTick);
+    janela.scrollLeft = 0;
     const dist = () => Math.max(0, trilho.scrollWidth - janela.clientWidth);
     const pan = gsap.to(trilho, {
       x: () => -dist(), ease: 'none',
       scrollTrigger: {
-        trigger: '.servicos', start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: 1, invalidateOnRefresh: true,
+        trigger: '.servicos', start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: true, invalidateOnRefresh: true,
         onUpdate: s => {
-          inclinaAlvo = gsap.utils.clamp(-3, 3, s.getVelocity() / -600);
           barra.style.transform = `scaleX(${s.progress})`;
           contador.textContent = Math.min(cardsServ.length, Math.round(s.progress * (cardsServ.length - 1)) + 1);
         }
       }
     });
     panST = pan.scrollTrigger;
-    cardsServ.forEach(c => gsap.from(c, {
-      opacity: .35, scale: .92, rotationY: -8, transformPerspective: 1400, transformOrigin: '0% 50%', ease: 'none',
-      scrollTrigger: { containerAnimation: pan, trigger: c, start: 'left 100%', end: 'left 72%', scrub: true }
-    }));
-    return () => { gsap.ticker.remove(inclinaTick); gsap.set(cardsServ, { skewX: 0 }); html.classList.remove('pan'); panST = null; };
+    return () => { html.classList.remove('pan'); panST = null; };
   });
   mm.add('(max-width: 1024px)', () => {
     let maxJanela = 0;
@@ -852,7 +843,9 @@
     if (!card) return;
     const destaca = () => { card.classList.add('destaque'); setTimeout(() => card.classList.remove('destaque'), 2200); };
     if (panST) {
-      const frac = Math.min(1, Math.max(0, (card.offsetLeft - (janela.clientWidth - card.offsetWidth) / 2) / (trilho.scrollWidth - janela.clientWidth)));
+      // o cartão escolhido para no primeiro lugar visível, logo depois do texto (onde o primeiro cartão começa)
+      const inicio = parseFloat(getComputedStyle(trilho).paddingLeft);
+      const frac = Math.min(1, Math.max(0, (card.offsetLeft - inicio) / (trilho.scrollWidth - janela.clientWidth)));
       rolaPara(panST.start + frac * (panST.end - panST.start), destaca);
     } else {
       rolaPara($('#servicos'), () => { janela.scrollTo({ left: card.offsetLeft - 20, behavior: 'smooth' }); destaca(); });
