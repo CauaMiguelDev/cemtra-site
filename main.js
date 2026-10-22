@@ -519,6 +519,7 @@
   // espera a fonte para quebrar as linhas dos títulos com as medidas certas
   const comeca = () => {
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true });
   if (window.SplitText) gsap.registerPlugin(SplitText);
 
   // rolagem suave
@@ -827,15 +828,18 @@
   let panST = null;
   const mm = gsap.matchMedia();
   // o trilho segue a rolagem direto (o Lenis já suaviza): sem atraso extra, sem inclinar nem girar os cartões,
-  // que deixavam o carrossel torto e lento em computadores mais fracos
-  mm.add('(min-width: 1025px)', () => {
+  // que deixavam o carrossel torto e lento em computadores mais fracos. Vale para qualquer largura (no celular o título
+  // fica em cima e os cartões embaixo); só em tela muito baixa (celular deitado) não cabe, e os cartões ficam para arrastar.
+  mm.add('(min-height: 500px)', () => {
     html.classList.add('pan');
     janela.scrollLeft = 0;
     const dist = () => Math.max(0, trilho.scrollWidth - janela.clientWidth);
     const pan = gsap.to(trilho, {
       x: () => -dist(), ease: 'none',
       scrollTrigger: {
-        trigger: '.servicos', start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: true, invalidateOnRefresh: true,
+        trigger: '.servicos', start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: true, invalidateOnRefresh: true, anticipatePin: 1,
+        // no celular a barra de baixo (WhatsApp, Ligar) sai enquanto o palco está fixo, para não cobrir os cartões
+        onToggle: s => { if (barraMovel) barraMovel.classList.toggle('no-palco', s.isActive); },
         onUpdate: s => {
           barra.style.transform = `scaleX(${s.progress})`;
           contador.textContent = Math.min(cardsServ.length, Math.round(s.progress * (cardsServ.length - 1)) + 1);
@@ -843,9 +847,9 @@
       }
     });
     panST = pan.scrollTrigger;
-    return () => { html.classList.remove('pan'); panST = null; };
+    return () => { html.classList.remove('pan'); panST = null; if (barraMovel) barraMovel.classList.remove('no-palco'); };
   });
-  mm.add('(max-width: 1024px)', () => {
+  mm.add('(max-height: 499px)', () => {
     let maxJanela = 0;
     const medeJanela = () => { maxJanela = janela.scrollWidth - janela.clientWidth; };
     const atualizaBarra = () => { barra.style.transform = `scaleX(${maxJanela > 0 ? janela.scrollLeft / maxJanela : 0})`; };
