@@ -3,6 +3,15 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const html = document.documentElement;
+  // computador sem aceleração de vídeo (driver antigo, acesso remoto, aceleração desligada): o navegador desenha tudo
+  // pelo processador, e vidro desfocado e camadas em movimento travam. O WebGL avisa esse caso: aí entra o modo leve.
+  if (!/leve=0/.test(location.search) && !html.classList.contains('leve')) {
+    try {
+      const gl = document.createElement('canvas').getContext('webgl', { failIfMajorPerformanceCaveat: true });
+      if (!gl) html.classList.add('leve');
+      else { const x = gl.getExtension('WEBGL_lose_context'); if (x) x.loseContext(); }
+    } catch (e) { /* sem WebGL: segue como está */ }
+  }
   const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const leve = html.classList.contains('leve');
   const fino = matchMedia('(hover: hover) and (pointer: fine)').matches && !leve;
@@ -355,10 +364,17 @@
   const noite = $('[data-noite]');
   if (noite && fino && !reduz) {
     const ceu = $('[data-estrelas]', noite);
+    let pendente = false, ex = 0, ey = 0;
     noite.addEventListener('pointermove', e => {
-      const r = noite.getBoundingClientRect();
-      ceu.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      ceu.style.setProperty('--my', `${e.clientY - r.top}px`);
+      ex = e.clientX; ey = e.clientY;
+      if (pendente) return;
+      pendente = true;
+      requestAnimationFrame(() => {
+        pendente = false;
+        const r = noite.getBoundingClientRect();
+        ceu.style.setProperty('--dx', `${ex - r.left - r.width * .7}px`);
+        ceu.style.setProperty('--dy', `${ey - r.top - r.height * .2}px`);
+      });
     });
   }
 
@@ -812,7 +828,7 @@
   const mm = gsap.matchMedia();
   // o trilho segue a rolagem direto (o Lenis já suaviza): sem atraso extra, sem inclinar nem girar os cartões,
   // que deixavam o carrossel torto e lento em computadores mais fracos
-  if (!leve) mm.add('(min-width: 1025px)', () => {
+  mm.add('(min-width: 1025px)', () => {
     html.classList.add('pan');
     janela.scrollLeft = 0;
     const dist = () => Math.max(0, trilho.scrollWidth - janela.clientWidth);
@@ -847,8 +863,10 @@
       const inicio = parseFloat(getComputedStyle(trilho).paddingLeft);
       const frac = Math.min(1, Math.max(0, (card.offsetLeft - inicio) / (trilho.scrollWidth - janela.clientWidth)));
       rolaPara(panST.start + frac * (panST.end - panST.start), destaca);
-    } else {
+    } else if (janela.scrollWidth > janela.clientWidth + 4) {
       rolaPara($('#servicos'), () => { janela.scrollTo({ left: card.offsetLeft - 20, behavior: 'smooth' }); destaca(); });
+    } else {
+      rolaPara(card, destaca);
     }
   };
 

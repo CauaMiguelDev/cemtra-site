@@ -412,6 +412,23 @@ strong, b { font-weight: 750; }
 .servicos__barra { display: none; }
 .servico.destaque { box-shadow: inset 0 1px 0 #fff, 0 0 0 2px var(--sol), 0 40px 70px -34px rgba(242,107,29,.55); }
 
+/* sem o palco horizontal (tablet, notebook com zoom alto, movimento reduzido, sem JS): os serviços viram uma grade.
+   Numa fileira lateral quem usa mouse só conseguia descer a página e nunca via os últimos cartões. */
+@media (min-width: 641px) {
+  html:not(.pan) .servicos__janela { overflow: visible; scroll-snap-type: none; }
+  html:not(.pan) .servicos__trilho {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 18px;
+    width: auto; max-width: 1320px; margin-inline: auto; padding: 6px var(--pad) 0;
+  }
+  html:not(.pan) .servico { width: auto; min-height: 420px; }
+  html:not(.pan) .servicos__fim {
+    grid-column: 1 / -1; width: auto; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 16px 24px; margin-top: 6px; padding: 26px 30px; border-radius: var(--r-lg); background: var(--branco); box-shadow: inset 0 0 0 1px var(--linha);
+  }
+  html:not(.pan) .servicos__fim p { font-size: 1.4rem; }
+  html:not(.pan) .servicos__barra { display: none; }
+}
+
 /* desktop com movimento: palco fixo, trilho anda na horizontal.
    O texto tem largura própria (não um % da tela, que em telas largas virava margem e quebrava o título palavra por palavra);
    o trilho ocupa a largura toda e os cartões somem por baixo do painel do texto, que esfuma na borda direita. */
@@ -449,7 +466,8 @@ strong, b { font-weight: 750; }
 .bento__cel--equipe { grid-column: 1 / 3; grid-row: 1 / 3; padding: 0; background: var(--noite); }
 .bento__cel--treino { grid-column: 1 / 3; grid-row: 3; padding: 0; background: var(--noite); }
 .bento__cel--equipe img, .bento__cel--treino img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; scale: 1.18; }
-.bento__cel--treino img { object-position: 60% 35%; }
+/* a foto só tem foco na pessoa da frente, à esquerda (o resto é a plateia desfocada) */
+.bento__cel--treino img { object-position: 12% 40%; }
 .bento__cel figcaption { position: absolute; left: 14px; bottom: 14px; right: 14px; max-width: 380px; padding: 18px 20px; border-radius: var(--r-md); display: flex; flex-direction: column; gap: 4px; }
 .vidro--chip::after, .vidro--chip::before { display: none; }
 .bento__cel figcaption strong, .bento__cel .vidro--chip strong { font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em; }
@@ -533,9 +551,17 @@ strong, b { font-weight: 750; }
     radial-gradient(1px 1px at 90% 30%, rgba(255,255,255,.6), transparent),
     radial-gradient(1px 1px at 22% 40%, rgba(255,255,255,.35), transparent),
     radial-gradient(1.5px 1.5px at 66% 46%, rgba(255,255,255,.4), transparent),
-    radial-gradient(1px 1px at 44% 34%, rgba(255,255,255,.45), transparent),
-    radial-gradient(900px 500px at var(--mx, 70%) var(--my, 20%), rgba(242,107,29,.12), transparent 70%);
+    radial-gradient(1px 1px at 44% 34%, rgba(255,255,255,.45), transparent);
 }
+/* a luz laranja do céu é uma camada própria que só desliza (transform): o céu inteiro não é repintado a cada movimento do mouse */
+.noite__ceu::after {
+  content: ""; position: absolute; left: 70%; top: 20%; width: 1800px; height: 1000px; margin: -500px 0 0 -900px;
+  background: radial-gradient(closest-side, rgba(242,107,29,.12), transparent 70%);
+  transform: translate(var(--dx, 0px), var(--dy, 0px)); will-change: transform;
+}
+/* os cartões das normas ficam sobre a noite quase lisa: o desfoque do vidro não aparecia e pesava em computador fraco */
+.norma.vidro-noite { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.norma.vidro-noite:not(.norma--destaque) { background: linear-gradient(140deg, rgba(255,255,255,.085), rgba(255,255,255,.035)); }
 .noite__congresso { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: clamp(200px, 26vw, 360px); z-index: -1; pointer-events: none; }
 .noite__conteudo { position: relative; }
 .noite .titulo-secao { color: var(--branco); }
@@ -754,7 +780,11 @@ strong, b { font-weight: 750; }
   .nav__abrir { display: grid; }
 }
 @media (max-width: 1024px) {
-  .portas__grade, .unidades__grade, .contato__grade, .mental__grade, .como__grade { grid-template-columns: minmax(0, 1fr); }
+  .unidades__grade, .mental__grade, .como__grade { grid-template-columns: minmax(0, 1fr); }
+  /* com o contato ainda em duas colunas, empresa e telefone empilham para não cortar o texto dos campos */
+  .campo-dupla { grid-template-columns: minmax(0, 1fr); }
+  /* sem buracos: o cartão escuro sobe para o lado do laranja quando um bloco largo fica entre eles */
+  .bento { grid-auto-flow: row dense; }
   .como__cabeca { position: static; }
   .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bento__cel--equipe { grid-column: 1 / -1; grid-row: auto; min-height: 380px; }
@@ -773,6 +803,17 @@ strong, b { font-weight: 750; }
   .bento__mapa-texto { max-width: none; background: linear-gradient(0deg, #fff 60%, rgba(255,255,255,0)); }
   .rodape__grade { grid-template-columns: 1fr 1fr; }
   .mental__visual { max-width: 440px; }
+}
+/* até 860px os pares (portas, contato) ainda cabem lado a lado; abaixo disso, uma coluna */
+@media (max-width: 860px) {
+  .portas__grade, .contato__grade { grid-template-columns: minmax(0, 1fr); }
+}
+/* toque: links de texto com área de pelo menos 44px, sem mudar o desenho */
+@media (pointer: coarse) {
+  .link-seta { padding-block: 10px; background-position: 0 calc(100% - 7px); }
+  .canal a { padding-block: 9px; margin-block: -9px; }
+  .rodape__lista a { padding-block: 9px; }
+  .hero__fatos a { padding-block: 11px; margin-block: -11px; }
 }
 @media (max-width: 760px) {
   :root { --nav-h: 62px; }
