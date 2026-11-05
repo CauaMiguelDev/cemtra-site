@@ -621,22 +621,6 @@ strong, b { font-weight: 750; }
 .norma:hover .norma__cod { text-shadow: 0 0 28px rgba(255,145,71,.55); }
 .norma p { color: rgba(255,255,255,.66); font-size: .9375rem; line-height: 1.5; }
 
-/* ---------- parceiros ---------- */
-.parceiros { padding-block: clamp(64px, 7vw, 100px); background: var(--concreto); }
-.parceiros__titulo { text-align: center; font-size: 1.25rem; font-weight: 750; letter-spacing: -.01em; color: var(--tinta-2); margin-bottom: 26px; }
-.faixa { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
-.faixa__trilho { display: flex; gap: 16px; width: max-content; padding-block: 8px; }
-.faixa__trilho li { width: 190px; height: 104px; flex: none; display: grid; place-items: center; padding: 16px 22px; border-radius: var(--r-md); background: var(--branco); box-shadow: inset 0 0 0 1px var(--linha); transition: box-shadow .3s ease, translate .5s var(--ease); }
-.faixa__trilho li:hover { translate: 0 -4px; box-shadow: inset 0 0 0 1px var(--sol), 0 18px 30px -20px rgba(242,107,29,.6); }
-.faixa__trilho img { max-height: 64px; max-width: 136px; width: auto; object-fit: contain; filter: grayscale(1); opacity: .7; transition: filter .35s ease, opacity .35s ease; }
-.faixa__trilho li:hover img { filter: none; opacity: 1; }
-@media (prefers-reduced-motion: no-preference) {
-  .faixa.rodando .faixa__trilho { animation: rola 46s linear infinite; }
-  .faixa.rodando:hover .faixa__trilho, .faixa.parado .faixa__trilho { animation-play-state: paused; }
-}
-@keyframes rola { to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .faixa { -webkit-mask-image: none; mask-image: none; } .faixa__trilho { flex-wrap: wrap; width: auto; justify-content: center; } }
-
 /* ---------- unidades ---------- */
 .unidades { background: var(--concreto); }
 .unidades__grade { margin-top: 48px; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 20px; align-items: stretch; }

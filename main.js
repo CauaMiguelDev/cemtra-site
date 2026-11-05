@@ -333,15 +333,6 @@
     });
   }
 
-  /* ---------- faixa de parceiros ---------- */
-  const faixa = $('[data-faixa]');
-  if (faixa && !reduz) {
-    const trilho = $('.faixa__trilho', faixa);
-    [...trilho.children].forEach(li => { const c = li.cloneNode(true); c.setAttribute('aria-hidden', 'true'); $('img', c).alt = ''; trilho.appendChild(c); });
-    faixa.classList.add('rodando');
-    new IntersectionObserver(([e]) => faixa.classList.toggle('parado', !e.isIntersecting)).observe(faixa);
-  }
-
   /* ---------- luz nas caixas (segue o cursor) e botões ---------- */
   if (fino) {
     $$('[data-card]').forEach(c => c.addEventListener('pointermove', e => {
@@ -758,27 +749,6 @@
     }, atraso);
   };
   ScrollTrigger.create({ trigger: '.normas', start: 'top 80%', once: true, onEnter: () => $$('.norma__cod').forEach((c, i) => embaralha(c, 250 + i * 90)) });
-
-  /* ---------- parceiros: a faixa responde à rolagem ---------- */
-  const faixaEl = $('[data-faixa]');
-  if (faixaEl) {
-    faixaEl.classList.remove('rodando');
-    const tr = $('.faixa__trilho', faixaEl);
-    let pos = 0, extra = 0, dir = 1, vendo = false, devagar = false;
-    new IntersectionObserver(([e]) => { vendo = e.isIntersecting; }).observe(faixaEl);
-    faixaEl.addEventListener('pointerenter', () => { devagar = true; });
-    faixaEl.addEventListener('pointerleave', () => { devagar = false; });
-    ScrollTrigger.create({ trigger: faixaEl, start: 'top bottom', end: 'bottom top', onUpdate: st => { dir = st.direction; extra = Math.min(700, Math.abs(st.getVelocity()) * .35); } });
-    gsap.ticker.add((t, dt) => {
-      if (!vendo) return;
-      const meio = tr.scrollWidth / 2;
-      pos -= ((devagar ? 12 : 46) + extra) * dir * dt / 1000;
-      extra *= .93;
-      if (pos <= -meio) pos += meio;
-      if (pos > 0) pos -= meio;
-      tr.style.transform = `translate3d(${pos.toFixed(2)}px, 0, 0)`;
-    });
-  }
 
   /* ---------- números que contam ---------- */
   $$('[data-conta]').forEach(n => {

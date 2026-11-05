@@ -162,7 +162,7 @@ Concreto frio e tinta neutra carregam tudo; um único laranja-sol faz o trabalho
 - **Concreto** (concreto): fundo da página e de quase todas as seções.
 - **Concreto Sombra** (concreto-2): fundo de ícone circular do FAQ, base do mapa embutido.
 - **Concreto Fundo** (concreto-3): fundo do painel de azulejos, linha pontilhada do "Como funciona", trilho da barra de progresso.
-- **Branco** (branco): base do vidro, cartões de logo de parceiros, célula de mapa, texto sobre a noite.
+- **Branco** (branco): base do vidro, célula de mapa, texto sobre a noite.
 - **Noite** (noite): fundo do capítulo noturno (normas, rodapé) e base escura sob fotos.
 - **Linha** (linha): divisores de 1px entre itens de lista (links de colaborador, canais de contato, menu do celular).
 - **Ok / Erro** (ok, erro): só estados de formulário (campo validado, mensagem de erro, botão "pronto").
@@ -196,7 +196,7 @@ Concreto frio e tinta neutra carregam tudo; um único laranja-sol faz o trabalho
 
 ## Layout
 
-Contêiner de 1320px com respiro lateral fluido (`pad`). Toda seção usa o mesmo ritmo vertical (`secao`, clamp(80px, 8.5vw, 124px)); a faixa de parceiros é a única mais curta. As grades são assimétricas em pares 7/5 ou 5/7 (hero, portas, unidades, contato, como funciona), o "sobre" usa um bento de 4 colunas com linhas de 230px mínimo, e as normas uma grade de 4 colunas com linha fixa de 72px para o código e NR-1 ocupando duas colunas.
+Contêiner de 1320px com respiro lateral fluido (`pad`). Toda seção usa o mesmo ritmo vertical (`secao`, clamp(80px, 8.5vw, 124px)). As grades são assimétricas em pares 7/5 ou 5/7 (hero, portas, unidades, contato, como funciona), o "sobre" usa um bento de 4 colunas com linhas de 230px mínimo, e as normas uma grade de 4 colunas com linha fixa de 72px para o código e NR-1 ocupando duas colunas.
 
 Serviços: no desktop com movimento (≥1025px) o palco é fixado e o trilho anda na horizontal; sem movimento ou abaixo disso, é um trilho com scroll-snap horizontal. O cabeçalho de "Como funciona" é sticky (top 140px) ao lado da trilha de passos.
 
@@ -274,7 +274,7 @@ Grade de azulejos de Athos Bulcão (quatro desenhos em Sol, Tinta e Branco) com 
 O hero tem um sol radial laranja com paralaxe de rolagem e de mouse. A fachada sobe dentro do arco com um recorte de baixo para cima; em volta, os cartões de vidro (nota no Google, endereço com status e a cúpula da otoscopia) chegam em sequência e flutuam devagar. A última palavra do título passa por PCMSO, PGR e LTCAT e para no eSocial, uma vez. A colunata do Alvorada fica só em traço, na base da seção "como funciona". A noite tem estrelas, um brilho laranja que segue o cursor e a silhueta do Congresso subindo com a rolagem.
 
 ### Motion
-Abertura só na primeira visita da sessão (sessionStorage): o logo surge girando devagar, o nome desfoca para nítido, um brilho de sol cresce atrás e tudo se dissolve enquanto o hero se monta (cerca de 4,5 s, easings power/sine, sem expo); clique acelera; a página sempre abre no topo (scrollRestoration manual); sem JS ou com movimento reduzido não aparece. A entrada da noite tem uma curva de Niemeyer em concreto com céu de pôr do sol. A faixa de parceiros anda com a rolagem (acelera e inverte o sentido). Os códigos das normas se embaralham ao aparecer. Os cartões de serviço inclinam até 3° com a velocidade da rolagem. As letras do CEMTRA gigante sobem uma a uma. Ease padrão `cubic-bezier(.16, 1, .3, 1)` (expo out) para quase tudo; `cubic-bezier(.77, 0, .175, 1)` para o recorte do menu. Títulos revelam palavra a palavra (SplitText). Rolagem suave com Lenis. Com `prefers-reduced-motion`: sem Lenis, sem pin, revelações instantâneas, transições a 1ms; sem JS o conteúdo aparece completo.
+Abertura só na primeira visita da sessão (sessionStorage): o logo surge girando devagar, o nome desfoca para nítido, um brilho de sol cresce atrás e tudo se dissolve enquanto o hero se monta (cerca de 4,5 s, easings power/sine, sem expo); clique acelera; a página sempre abre no topo (scrollRestoration manual); sem JS ou com movimento reduzido não aparece. A entrada da noite tem uma curva de Niemeyer em concreto com céu de pôr do sol. Os códigos das normas se embaralham ao aparecer. Os cartões de serviço inclinam até 3° com a velocidade da rolagem. As letras do CEMTRA gigante sobem uma a uma. Ease padrão `cubic-bezier(.16, 1, .3, 1)` (expo out) para quase tudo; `cubic-bezier(.77, 0, .175, 1)` para o recorte do menu. Títulos revelam palavra a palavra (SplitText). Rolagem suave com Lenis. Com `prefers-reduced-motion`: sem Lenis, sem pin, revelações instantâneas, transições a 1ms; sem JS o conteúdo aparece completo.
 
 ## Do's and Don'ts
 
