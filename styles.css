@@ -302,6 +302,8 @@ strong, b { font-weight: 750; }
 .mega.aberto li:nth-child(4) .mega__item { transition-delay: 90ms; }
 .mega.aberto li:nth-child(5) .mega__item { transition-delay: 120ms; }
 .mega.aberto li:nth-child(6) .mega__item { transition-delay: 150ms; }
+.mega.aberto li:nth-child(7) .mega__item { transition-delay: 180ms; }
+.mega.aberto li:nth-child(8) .mega__item { transition-delay: 210ms; }
 .mega.aberto .mega__sol { transition-delay: 90ms; }
 
 /* ---------- menu do celular ---------- */
@@ -576,6 +578,24 @@ strong, b { font-weight: 750; }
 .mental__texto { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
 .mental__texto > p { color: var(--tinta-2); font-size: 1.125rem; max-width: 58ch; }
 .mental__texto > p strong { color: var(--tinta); }
+/* detalhes da avaliação psicossocial, ainda sobre o fundo da saúde mental */
+.psico { margin-top: var(--secao); display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px); }
+.psico__cabeca { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(18px, 5vw, 80px); align-items: end; }
+.psico__cabeca p { max-width: 58ch; font-size: 1.125rem; color: var(--tinta-2); }
+.psico__grade { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+.psico__card { grid-column: span 5; min-width: 0; padding: clamp(24px, 3vw, 34px); display: flex; flex-direction: column; gap: 14px; align-items: flex-start; border-radius: var(--r-lg); }
+.psico__card--largo { grid-column: span 7; }
+.psico__card h3 { font-size: 1.6rem; }
+.psico__card > p { color: var(--tinta-2); }
+.psico__card .lista-ico { margin-block: 0; }
+.psico__card .lista-ico li { align-items: flex-start; line-height: 1.4; }
+.psico__normas { width: 100%; display: grid; gap: 14px; }
+.psico__normas li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; color: var(--tinta-2); }
+.psico__normas b { font-weight: 800; color: var(--sol-texto); }
+.psico__normas li + li { padding-top: 14px; border-top: 1px solid var(--linha); }
+.psico__card--noite { background: var(--noite); color: var(--branco); }
+.psico__card--noite .botao { margin-top: auto; }
+
 .lista-ico { display: grid; gap: 10px; margin-block: 4px 10px; }
 .lista-ico li { display: flex; gap: 12px; align-items: center; font-weight: 650; }
 .lista-ico__ico { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--sol); color: var(--tinta); }
@@ -654,6 +674,10 @@ strong, b { font-weight: 750; }
 .unidade__cabeca { display: flex; gap: 16px; align-items: flex-start; }
 .unidade h3 { font-size: 1.6rem; }
 .unidade__cabeca p { color: var(--tinta-2); margin-top: 4px; }
+.unidade__horario { display: flex; gap: 10px; align-items: flex-start; font-size: .9375rem; font-weight: 600; line-height: 1.4; color: var(--tinta-2); }
+.unidade__horario .i { flex: none; margin-top: 1px; width: 20px; height: 20px; color: var(--sol-texto); }
+.unidade__horario strong { display: block; color: var(--tinta); font-weight: 750; }
+.unidade__horario span { text-wrap: pretty; }
 .unidade__acoes { display: flex; flex-wrap: wrap; gap: 10px; }
 .unidade__cabeca h3, .unidade__cabeca p { transition: opacity .3s ease, translate .5s var(--ease); }
 .unidade.trocando .unidade__cabeca h3, .unidade.trocando .unidade__cabeca p { opacity: 0; translate: 0 6px; }
@@ -832,6 +856,8 @@ strong, b { font-weight: 750; }
 }
 /* até 860px os pares (portas, contato) ainda cabem lado a lado; abaixo disso, uma coluna */
 @media (max-width: 860px) {
+  .psico__cabeca { grid-template-columns: minmax(0, 1fr); }
+  .psico__card, .psico__card--largo { grid-column: 1 / -1; }
   .portas__grade, .contato__grade { grid-template-columns: minmax(0, 1fr); }
 }
 /* toque: links de texto com área de pelo menos 44px, sem mudar o desenho */
@@ -926,6 +952,7 @@ strong, b { font-weight: 750; }
 @keyframes brilho { to { transform: translateX(120%); } }
 .hero__fatos { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 4px 0 0; padding: 0; list-style: none; font-size: .9375rem; font-weight: 650; color: var(--tinta-2); }
 .hero__fatos li { display: inline-flex; align-items: center; gap: 8px; }
+.hero__fatos li:first-child { flex-basis: 100%; }
 .hero__fatos .i { width: 20px; height: 20px; color: var(--sol-texto); }
 .hero__fatos a { color: var(--tinta); text-decoration: underline; text-decoration-color: var(--sol); text-decoration-thickness: 2px; text-underline-offset: 5px; transition: color .3s ease; }
 .hero__fatos a:hover { color: var(--sol-texto); }

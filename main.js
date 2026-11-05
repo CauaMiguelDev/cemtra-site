@@ -61,7 +61,8 @@
   const ano = $('[data-ano]');
   if (ano) ano.textContent = new Date().getFullYear();
 
-  // aberto / fechado no horário de Brasília
+  // chegada para consulta no horário de Brasília: a clínica fecha às 17h, mas só dá para concluir o atendimento de quem chega
+  // das 7h às 10h ou das 13h às 15h, de segunda a sexta
   const status = () => {
     const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
       timeZone: 'America/Sao_Paulo', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23'
@@ -69,10 +70,12 @@
     const dia = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday);
     const min = +p.hour * 60 + +p.minute;
     const util = dia >= 1 && dia <= 5;
-    if (util && min >= 420 && min < 1020) return { aberto: true, txt: 'Aberto agora, até 17h' };
-    if (util && min < 420) return { aberto: false, txt: 'Fechado, abre hoje às 7h' };
-    if (dia >= 1 && dia <= 4) return { aberto: false, txt: 'Fechado, abre amanhã às 7h' };
-    return { aberto: false, txt: 'Fechado, abre segunda às 7h' };
+    if (util && min >= 420 && min < 600) return { aberto: true, txt: 'Chegue até as 10h para consulta' };
+    if (util && min >= 780 && min < 900) return { aberto: true, txt: 'Chegue até as 15h para consulta' };
+    if (util && min < 420) return { aberto: false, txt: 'Próxima chegada hoje, às 7h' };
+    if (util && min < 780) return { aberto: false, txt: 'Próxima chegada às 13h' };
+    if (dia >= 1 && dia <= 4) return { aberto: false, txt: 'Próxima chegada amanhã, às 7h' };
+    return { aberto: false, txt: 'Próxima chegada segunda, às 7h' };
   };
   const pintaStatus = () => {
     const s = status();
