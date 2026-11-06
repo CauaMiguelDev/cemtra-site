@@ -18,7 +18,7 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preload" as="font" type="font/woff2" href="assets/fontes/urbanist-latin.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/fachada.webp?v=2" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=103">
+  <link rel="stylesheet" href="styles.css?v=105">
   <script>(function(h){h.classList.add('js','carregando');var q=location.search,nc=navigator.hardwareConcurrency||8,mem=navigator.deviceMemory||8,fraco=nc<=2||mem<=2||(nc<=4&&mem<=4);if(/leve=1/.test(q))fraco=true;if(/leve=0/.test(q))fraco=false;if(fraco)h.classList.add('leve');if('scrollRestoration' in history)history.scrollRestoration='manual';try{if(!sessionStorage.getItem('cemtra-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('intro');sessionStorage.setItem('cemtra-intro','1')}}catch(e){}window.cemtraT=[setTimeout(function(){h.classList.remove('carregando')},2600),setTimeout(function(){h.classList.remove('intro')},3200)]})(document.documentElement)</script>
   <script type="application/ld+json">
   {
@@ -118,7 +118,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="mega" id="mega" hidden data-mega>
             <ul class="mega__grade">
               <li><a class="mega__item" href="#servicos" data-ir-servico="exames"><span class="mega__ico"><svg class="i" aria-hidden="true"><use href="#d-stethoscope"/></svg></span><span><strong>Exames ocupacionais</strong><small>Admissional, periódico, demissional e mais</small></span></a></li>
-              <li><a class="mega__item" href="#servicos" data-ir-servico="complementares"><span class="mega__ico"><svg class="i" aria-hidden="true"><use href="#d-heartbeat"/></svg></span><span><strong>Exames complementares e reabilitação</strong><small>RNM, TC e fisioterapia com a Clínica Santa Rita</small></span></a></li>
+              <li><a class="mega__item" href="#servicos" data-ir-servico="complementares"><span class="mega__ico"><svg class="i" aria-hidden="true"><use href="#d-heartbeat"/></svg></span><span><strong>Exames complementares e reabilitação</strong><small>RNM, TC e fisioterapia</small></span></a></li>
               <li><a class="mega__item" href="#servicos" data-ir-servico="laudos"><span class="mega__ico"><svg class="i" aria-hidden="true"><use href="#d-clipboard-text"/></svg></span><span><strong>Laudos e programas</strong><small>PCMSO, PGR e LTCAT</small></span></a></li>
               <li><a class="mega__item" href="#servicos" data-ir-servico="mental"><span class="mega__ico"><svg class="i" aria-hidden="true"><use href="#d-brain"/></svg></span><span><strong>Saúde mental</strong><small>Psiquiatria e psicologia ocupacional</small></span></a></li>
               <li><a class="mega__item" href="#servicos" data-ir-servico="psicossocial"><span class="mega__ico"><svg class="i" aria-hidden="true"><use href="#d-chats-circle"/></svg></span><span><strong>Avaliação psicossocial</strong><small>Riscos psicossociais da NR-1</small></span></a></li>
@@ -162,6 +162,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <ul class="menu__links">
       <li><a href="#servicos">Serviços<svg class="i" aria-hidden="true"><use href="#b-arrow-right"/></svg></a></li>
       <li><a href="#sobre">Sobre a CEMTRA<svg class="i" aria-hidden="true"><use href="#b-arrow-right"/></svg></a></li>
+      <li><a href="#diagnostico">Exames e fisioterapia<svg class="i" aria-hidden="true"><use href="#b-arrow-right"/></svg></a></li>
       <li><a href="#saude-mental">Saúde mental<svg class="i" aria-hidden="true"><use href="#b-arrow-right"/></svg></a></li>
       <li><a href="#normas">Normas<svg class="i" aria-hidden="true"><use href="#b-arrow-right"/></svg></a></li>
       <li><a href="#unidades">Unidades<svg class="i" aria-hidden="true"><use href="#b-arrow-right"/></svg></a></li>
@@ -185,8 +186,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <section class="hero" id="inicio" data-hero>
     <div class="conteiner hero__grade">
       <div class="hero__texto">
-        <h1 class="hero__titulo" data-hero-titulo>Sua equipe em dia, do exame ao <em data-hero-giro>eSocial.</em></h1>
-        <p class="hero__lead" data-hero-item>Exames ocupacionais, PCMSO, PGR, LTCAT e saúde mental na primeira policlínica de medicina do trabalho de Brasília, com cinco unidades no DF e entorno.</p>
+        <h1 class="hero__titulo" data-hero-titulo>Sua equipe em dia, do exame ao <em class="traco" data-hero-giro>eSocial.</em></h1>
+        <p class="hero__lead" data-hero-item>Exames ocupacionais, PCMSO, PGR, LTCAT e saúde mental na <span class="grifo">primeira policlínica de medicina do trabalho</span> de Brasília, com cinco unidades no DF e entorno.</p>
         <div class="hero__acoes" data-hero-item data-hero-acoes>
           <a class="botao botao--tinta botao--lg hero__agendar" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de agendar exames ocupacionais." data-ima><span class="botao__ico"><svg class="i" aria-hidden="true"><use href="#f-whatsapp-logo"/></svg></span>Agendar pelo WhatsApp</a>
           <a class="botao botao--vidro botao--lg hero__orcamento" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de um orçamento para minha empresa." data-ima>Pedir orçamento<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
@@ -230,7 +231,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <!-- ============ PARA QUEM ============ -->
   <section class="secao portas" aria-labelledby="portas-titulo">
     <div class="conteiner">
-      <h2 class="titulo-secao" id="portas-titulo" data-palavras>Por onde você quer começar?</h2>
+      <h2 class="titulo-secao" id="portas-titulo" data-palavras>Por onde você quer <span class="traco">começar?</span></h2>
       <div class="portas__grade">
         <article class="vidro porta porta--empresa" data-card data-tilt>
           <span class="ico-bloco"><svg class="i" aria-hidden="true"><use href="#d-briefcase"/></svg></span>
@@ -260,8 +261,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <section class="servicos" id="servicos" aria-labelledby="servicos-titulo" data-servicos>
     <div class="servicos__palco">
       <div class="servicos__intro">
-        <h2 class="titulo-secao" id="servicos-titulo" data-palavras>Serviços para cada etapa da saúde ocupacional.</h2>
-        <p>Do exame admissional ao laudo técnico. Escolha o serviço e peça o orçamento pelo WhatsApp.</p>
+        <h2 class="titulo-secao" id="servicos-titulo" data-palavras>Serviços para cada etapa da <span class="traco">saúde ocupacional.</span></h2>
+        <p>Do exame admissional ao laudo técnico. Escolha o serviço e peça o <span class="grifo">orçamento pelo WhatsApp.</span></p>
         <div class="servicos__setas" aria-hidden="true"><span class="servicos__contador"><b data-servico-atual>1</b> de 8</span></div>
       </div>
       <div class="servicos__janela" data-janela>
@@ -278,9 +279,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <article class="vidro servico" id="servico-complementares" data-servico="complementares" data-card>
           <span class="ico-bloco"><svg class="i" aria-hidden="true"><use href="#d-heartbeat"/></svg></span>
           <h3>Exames complementares e reabilitação</h3>
-          <p>Ressonância, tomografia, fisioterapia e demais exames com a nossa medicina convencional, a Clínica Santa Rita.</p>
+          <p>Ressonância, tomografia, fisioterapia e demais exames com a nossa medicina convencional.</p>
           <ul class="fichas-info"><li>RNM</li><li>TC</li><li>Fisioterapia</li><li>Reabilitação funcional</li></ul>
-          <a class="link-seta" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de informações sobre RNM, TC, fisioterapia e exames complementares.">Pedir orçamento<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
+          <a class="link-seta" href="#diagnostico">Ver como funciona<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
         </article>
 
         <article class="vidro servico" id="servico-laudos" data-servico="laudos" data-card>
@@ -348,8 +349,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <!-- ============ SOBRE ============ -->
   <section class="secao sobre" id="sobre" aria-labelledby="sobre-titulo">
     <div class="conteiner">
-      <h2 class="declaracao" id="sobre-titulo" data-declaracao>A primeira <span class="dest">policlínica de medicina do trabalho</span> de Brasília, com toda a gestão ocupacional da sua empresa num só lugar.</h2>
-      <p class="sobre__texto">Exames, especialidades médicas, programas ocupacionais, treinamentos, psiquiatria ocupacional e avaliação psicossocial, com atendimento personalizado para empresas de todos os segmentos. Ressonância, tomografia, fisioterapia e exames complementares ficam com a nossa medicina convencional, a Clínica Santa Rita.</p>
+      <h2 class="declaracao" id="sobre-titulo" data-declaracao>A primeira <span class="dest grifo">policlínica de medicina do trabalho</span> de Brasília, com toda a gestão ocupacional da sua empresa num só lugar.</h2>
+      <p class="sobre__texto">Exames, especialidades médicas, programas ocupacionais, treinamentos, psiquiatria ocupacional e avaliação psicossocial, com <span class="grifo">atendimento personalizado</span> para empresas de todos os segmentos. Também fazemos ressonância, tomografia, fisioterapia e exames complementares com a nossa medicina convencional.</p>
 
       <div class="bento">
         <figure class="bento__cel bento__cel--equipe" data-card>
@@ -401,8 +402,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <section class="secao como" aria-labelledby="como-titulo" data-como>
     <div class="conteiner como__grade">
       <div class="como__cabeca">
-        <h2 class="titulo-secao" id="como-titulo" data-palavras>Do primeiro contato ao resultado.</h2>
-        <p>Três passos simples para colocar a saúde ocupacional da sua equipe em dia.</p>
+        <h2 class="titulo-secao" id="como-titulo" data-palavras>Do primeiro contato ao <span class="traco">resultado.</span></h2>
+        <p data-linhas>Três passos simples para colocar a saúde ocupacional da sua equipe em dia.</p>
       </div>
       <div class="como__trilha">
         <svg class="como__linha" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true">
@@ -439,6 +440,94 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     </svg>
 </section>
 
+  <!-- ============ DIAGNÓSTICO E REABILITAÇÃO ============ -->
+  <section class="secao diag" id="diagnostico" aria-labelledby="diag-titulo" data-diag>
+    <div class="diag__fundo" aria-hidden="true">
+      <div class="diag__palco">
+        <span class="diag__varre"></span>
+        <svg class="diag__aneis" viewBox="-500 -500 1000 1000"><circle r="150"/><circle r="262"/><circle r="372"/><circle r="486"/></svg>
+        <svg class="diag__anel diag__anel--a" viewBox="-500 -500 1000 1000"><circle r="262" pathLength="360" stroke-dasharray="2 8"/></svg>
+        <svg class="diag__anel diag__anel--b" viewBox="-500 -500 1000 1000"><circle r="372" pathLength="360" stroke-dasharray="46 44"/></svg>
+        <svg class="diag__anel diag__anel--sol" viewBox="-500 -500 1000 1000"><circle r="486" pathLength="360" stroke-dasharray="58 302"/></svg>
+      </div>
+      <span class="diag__corte"></span>
+    </div>
+
+    <div class="conteiner diag__conteudo">
+      <div class="diag__cabeca">
+        <h2 class="titulo-secao" id="diag-titulo" data-palavras>Do exame de imagem à <span class="traco">reabilitação.</span></h2>
+        <div class="diag__lead">
+          <p>RNM, TC, fisioterapia e exames complementares com a nossa medicina convencional, para cuidar da sua equipe <span class="grifo">do diagnóstico à recuperação.</span></p>
+          <p class="diag__giro"><span class="sr-only">Ressonância magnética, tomografia computadorizada, fisioterapia e exames complementares.</span><span class="diag__giro-lista" aria-hidden="true"><span>Ressonância magnética</span><span>Tomografia computadorizada</span><span>Fisioterapia</span><span>Exames complementares</span></span></p>
+        </div>
+      </div>
+
+      <div class="diag__lista">
+        <article class="diag__item" data-diag-item>
+          <figure class="diag__foto diag__foto--corte">
+            <img src="assets/img/diag-rnm.webp" width="1200" height="900" alt="Sala de ressonância magnética: aparelho, mesa de exame e painel de paisagem com cachoeira na parede" loading="lazy">
+            <span class="diag__raio" aria-hidden="true"></span>
+            <figcaption class="diag__legenda">Sala de ressonância</figcaption>
+          </figure>
+          <div class="vidro diag__painel" data-card>
+            <h3>Ressonância magnética <span class="diag__sigla">RNM</span></h3>
+            <p>Imagens detalhadas dos órgãos internos, sem radiação ionizante, com alta precisão para o médico chegar ao diagnóstico.</p>
+            <ul class="fichas-info"><li>Neurologia</li><li>Músculos</li><li>Urologia</li></ul>
+            <p class="diag__exemplo"><strong>Exemplo:</strong> investigar uma dor na coluna ou no joelho que não melhora.</p>
+            <a class="link-seta" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de informações sobre ressonância magnética (RNM).">Pedir informações<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="diag__item" data-diag-item>
+          <figure class="diag__foto diag__foto--corte">
+            <img src="assets/img/diag-tc.webp" width="1200" height="900" alt="Sala de tomografia: tomógrafo, mesa de exame e painel de paisagem com lago e montanhas na parede" loading="lazy">
+            <span class="diag__raio" aria-hidden="true"></span>
+            <figcaption class="diag__legenda">Sala de tomografia</figcaption>
+          </figure>
+          <div class="vidro diag__painel" data-card>
+            <h3>Tomografia computadorizada <span class="diag__sigla">TC</span></h3>
+            <p>Imagens em cortes anatômicos de alta definição, que trazem agilidade ao diagnóstico.</p>
+            <ul class="fichas-info"><li>Lesões</li><li>Tumores</li><li>Processos inflamatórios</li></ul>
+            <p class="diag__exemplo"><strong>Exemplo:</strong> avaliar uma lesão depois de uma queda ou pancada.</p>
+            <a class="link-seta" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de informações sobre tomografia computadorizada (TC).">Pedir informações<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="diag__item" data-diag-item>
+          <figure class="diag__foto">
+            <img src="assets/img/diag-fisio.webp" width="1200" height="900" alt="Fisioterapeuta orienta um paciente em um exercício para o ombro, em uma sala clara" loading="lazy">
+            <span class="diag__raio" aria-hidden="true"></span>
+          </figure>
+          <div class="vidro diag__painel" data-card>
+            <h3>Fisioterapia</h3>
+            <p>Reabilitação funcional para recuperar movimento, força e autonomia depois de uma lesão, de uma cirurgia ou de um afastamento.</p>
+            <ul class="fichas-info"><li>Reabilitação funcional</li><li>Dor e lesões</li><li>Pós-cirúrgico</li><li>Retorno ao trabalho</li></ul>
+            <p class="diag__exemplo"><strong>Exemplo:</strong> recuperar o movimento do ombro antes de voltar à função.</p>
+            <a class="link-seta" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de informações sobre fisioterapia e reabilitação funcional.">Pedir informações<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="diag__item" data-diag-item>
+          <figure class="diag__foto">
+            <img src="assets/img/diag-exames.webp" width="1200" height="900" alt="Tubos de amostra em um suporte ao lado de uma centrífuga, em uma bancada de laboratório" loading="lazy">
+            <span class="diag__raio" aria-hidden="true"></span>
+          </figure>
+          <div class="vidro diag__painel" data-card>
+            <h3>Exames complementares</h3>
+            <p>Os exames que completam a avaliação médica e o PCMSO de cada função, com o apoio da nossa medicina convencional.</p>
+            <ul class="fichas-info"><li>Eletrocardiograma</li><li>Espirometria</li><li>MAPA e Holter</li><li>Ultrassonografia</li><li>Laboratório</li></ul>
+            <p class="diag__exemplo"><strong>Exemplo:</strong> a função do colaborador pede eletrocardiograma ou espirometria.</p>
+            <a class="link-seta" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de informações sobre exames complementares.">Pedir informações<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a>
+          </div>
+        </article>
+      </div>
+
+      <div class="vidro diag__fim" data-card>
+        <p><strong class="grifo">Quem indica cada exame é o médico.</strong> Fale com a gente para saber como agendar para a sua equipe.</p>
+        <div class="diag__fim-acoes">
+          <a class="botao botao--tinta" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de informações sobre RNM, TC, fisioterapia e exames complementares." data-ima><span class="botao__ico"><svg class="i" aria-hidden="true"><use href="#f-whatsapp-logo"/></svg></span>Falar no WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ SAÚDE MENTAL ============ -->
   <section class="secao mental" id="saude-mental" aria-labelledby="mental-titulo">
     <div class="conteiner mental__grade">
@@ -448,14 +537,14 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <span class="cupula__orbita" aria-hidden="true"></span>
         <div class="vidro mental__citacao" data-prof-scroll>
-          <p>Investir em saúde mental é investir em qualidade de vida, segurança e produtividade.</p>
+          <p data-acende>Investir em saúde mental é investir em qualidade de vida, segurança e produtividade.</p>
           <span class="mental__assinatura">CEMTRA</span>
         </div>
       </div>
       <div class="mental__texto">
-        <h2 class="titulo-secao" id="mental-titulo" data-palavras>Saúde mental também é segurança do trabalho.</h2>
-        <p>Com a atualização da <strong>NR-1</strong>, os fatores de riscos psicossociais, como sobrecarga, metas excessivas e conflitos no trabalho, passaram a fazer parte do gerenciamento de riscos da empresa.</p>
-        <p>A CEMTRA apoia esse cuidado com avaliação psicossocial, psiquiatria e psicologia ocupacional, prevenção, acolhimento e acompanhamento individualizado, em conformidade com a <strong>NR-7</strong> e o <strong>PGR</strong>.</p>
+        <h2 class="titulo-secao" id="mental-titulo" data-palavras>Saúde mental também é <span class="traco">segurança</span> do trabalho.</h2>
+        <p>Com a atualização da <strong>NR-1</strong>, os <span class="grifo">fatores de riscos psicossociais</span>, como sobrecarga, metas excessivas e conflitos no trabalho, passaram a fazer parte do gerenciamento de riscos da empresa.</p>
+        <p>A CEMTRA apoia esse cuidado com avaliação psicossocial, psiquiatria e psicologia ocupacional, prevenção, acolhimento e <span class="grifo">acompanhamento individualizado</span>, em conformidade com a <strong>NR-7</strong> e o <strong>PGR</strong>.</p>
         <ul class="lista-ico" data-lista>
           <li><span class="lista-ico__ico"><svg class="i i--sm" aria-hidden="true"><use href="#b-check"/></svg></span>Avaliação psicossocial</li>
           <li><span class="lista-ico__ico"><svg class="i i--sm" aria-hidden="true"><use href="#b-check"/></svg></span>Avaliações psicológicas e psiquiátricas ocupacionais</li>
@@ -470,8 +559,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
     <div class="conteiner psico" id="psicossocial">
       <div class="psico__cabeca">
-        <h2 class="titulo-secao" data-palavras>Entenda a avaliação psicossocial.</h2>
-        <p>Ela mostra como o trabalho está afetando a saúde mental de quem trabalha. Considera a função, a rotina e a forma como o trabalho é organizado, para a empresa agir antes que o problema vire afastamento ou acidente.</p>
+        <h2 class="titulo-secao" data-palavras>Entenda a avaliação <span class="traco">psicossocial.</span></h2>
+        <p>Ela mostra como o trabalho está afetando a saúde mental de quem trabalha. Considera a função, a rotina e a forma como o trabalho é organizado, para a empresa agir <span class="grifo">antes que o problema vire afastamento ou acidente.</span></p>
       </div>
       <div class="psico__grade">
         <article class="vidro psico__card psico__card--largo" data-card>
@@ -524,8 +613,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       </g>
     </svg>
     <div class="conteiner noite__conteudo">
-      <h2 class="titulo-secao" id="normas-titulo" data-palavras>As normas que sua empresa precisa cumprir.</h2>
-      <p class="noite__sub">A CEMTRA ajuda em cada uma, com conformidade legal e apoio no eSocial para empresas de todos os portes.</p>
+      <h2 class="titulo-secao" id="normas-titulo" data-palavras>As normas que sua empresa precisa <span class="traco">cumprir.</span></h2>
+      <p class="noite__sub">A CEMTRA ajuda em cada uma, com <span class="grifo">conformidade legal</span> e apoio no eSocial para empresas de todos os portes.</p>
       <ul class="normas">
         <li class="vidro-noite norma norma--destaque" data-card><span class="norma__cod">NR-1</span><strong>PGR e riscos psicossociais</strong><p>Gerenciamento de riscos ocupacionais. Desde a atualização da norma, inclui os fatores psicossociais, como sobrecarga e metas excessivas.</p><a class="link-seta link-seta--claro" href="#saude-mental">Saúde mental no trabalho<svg class="i i--sm" aria-hidden="true"><use href="#b-arrow-right"/></svg></a></li>
         <li class="vidro-noite norma" data-card><span class="norma__cod">NR-7</span><strong>PCMSO</strong><p>Programa de Controle Médico de Saúde Ocupacional: exames e ASO de cada colaborador.</p></li>
@@ -545,8 +634,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     </svg>
 
     <div class="conteiner">
-      <h2 class="titulo-secao" id="unidades-titulo" data-palavras>Cinco unidades no DF e entorno.</h2>
-      <p class="secao__sub">Escolha uma unidade para ver o endereço, traçar a rota ou chamar direto no WhatsApp.</p>
+      <h2 class="titulo-secao" id="unidades-titulo" data-palavras><span class="traco">Cinco unidades</span> no DF e entorno.</h2>
+      <p class="secao__sub" data-linhas>Escolha uma unidade para ver o endereço, traçar a rota ou chamar direto no WhatsApp.</p>
 
       <div class="unidades__grade">
         <div class="vidro mapa-df" data-card>
@@ -595,7 +684,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
     <div class="conteiner">
       <h2 class="titulo-secao" id="duvidas-titulo" data-palavras>Dúvidas frequentes.</h2>
-      <p class="secao__sub">Respostas rápidas sobre exames, documentos e normas.</p>
+      <p class="secao__sub" data-linhas>Respostas rápidas sobre exames, documentos e normas.</p>
       <div class="faq">
         <div class="faq__col">
         <details class="vidro faq__item" name="faq" open>
@@ -635,7 +724,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </details>
         <details class="vidro faq__item" name="faq">
           <summary>Vocês fazem ressonância, tomografia e fisioterapia?<span class="faq__ico" aria-hidden="true"><svg class="i i--sm"><use href="#b-plus"/></svg></span></summary>
-          <div class="faq__resp"><p>Sim, com a nossa medicina convencional, a Clínica Santa Rita: ressonância magnética (RNM), tomografia computadorizada (TC), fisioterapia com reabilitação funcional e exames complementares. Chame a gente no WhatsApp para saber como agendar.</p></div>
+          <div class="faq__resp"><p>Sim, com a nossa medicina convencional: ressonância magnética (RNM), tomografia computadorizada (TC), fisioterapia com reabilitação funcional e exames complementares. <a href="#diagnostico">Veja os detalhes</a> ou chame a gente no WhatsApp para saber como agendar.</p></div>
         </details>
         <details class="vidro faq__item" name="faq">
           <summary>Como acesso o resultado dos exames?<span class="faq__ico" aria-hidden="true"><svg class="i i--sm"><use href="#b-plus"/></svg></span></summary>
@@ -655,8 +744,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <div class="chamada__sol" aria-hidden="true" data-chamada-sol></div>
     <div class="chamada__azulejos" aria-hidden="true"></div>
     <div class="conteiner chamada__conteudo">
-      <h2 id="chamada-titulo" data-palavras>Coloque a saúde ocupacional da sua empresa em dia.</h2>
-      <p>Fale com a unidade mais perto e receba seu orçamento.</p>
+      <h2 id="chamada-titulo" data-palavras>Coloque a saúde ocupacional da sua empresa <span class="traco">em dia.</span></h2>
+      <p>Fale com a unidade mais perto e <span class="grifo">receba seu orçamento.</span></p>
       <div class="chamada__acoes">
         <a class="botao botao--tinta botao--lg" href="https://wa.me/5561993703306" target="_blank" rel="noopener" data-wa="Olá! Gostaria de um orçamento para minha empresa." data-ima><span class="botao__ico"><svg class="i" aria-hidden="true"><use href="#f-whatsapp-logo"/></svg></span>Pedir orçamento</a>
         <a class="botao botao--contorno botao--lg" href="tel:+556133556435"><svg class="i i--sm" aria-hidden="true"><use href="#b-phone"/></svg>(61) 3355-6435</a>
@@ -670,8 +759,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
     <div class="conteiner contato__grade">
       <div class="contato__info">
-        <h2 class="titulo-secao" id="contato-titulo" data-palavras>Fale com a CEMTRA.</h2>
-        <p>Monte seu pedido e levamos você direto ao WhatsApp da unidade escolhida, com a mensagem pronta.</p>
+        <h2 class="titulo-secao" id="contato-titulo" data-palavras>Fale com a <span class="traco">CEMTRA.</span></h2>
+        <p>Monte seu pedido e levamos você direto ao WhatsApp da unidade escolhida, <span class="grifo">com a mensagem pronta.</span></p>
         <ul class="vidro canais" data-card>
           <li class="canal"><span class="ico-bloco ico-bloco--sm"><svg class="i" aria-hidden="true"><use href="#b-phone"/></svg></span><div><span>Telefone</span><a href="tel:+556133556435">(61) 3355-6435</a></div></li>
           <li class="canal"><span class="ico-bloco ico-bloco--sm"><svg class="i" aria-hidden="true"><use href="#b-whatsapp-logo"/></svg></span><div><span>WhatsApp</span><a href="https://wa.me/5561993703306" target="_blank" rel="noopener">(61) 99370-3306</a></div></li>
@@ -795,6 +884,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
 <script src="assets/vendor/SplitText.min.js" defer></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
-<script src="main.js?v=74" defer></script>
+<script src="main.js?v=78" defer></script>
 </body>
 </html>

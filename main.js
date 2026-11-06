@@ -490,6 +490,14 @@
   // a barra de baixo do celular some enquanto os botões do hero estão na tela (não duplica nem cobre o "Agendar")
   const acoesHero = $('[data-hero-acoes]');
   if (barraMovel && acoesHero && 'IntersectionObserver' in window) new IntersectionObserver(([e]) => barraMovel.classList.toggle('no-hero', e.isIntersecting)).observe(acoesHero);
+  // o fundo animado da seção de diagnóstico só anda com ela na tela
+  const diag = $('[data-diag]');
+  if (diag && 'IntersectionObserver' in window) new IntersectionObserver(([e]) => diag.classList.toggle('em-tela', e.isIntersecting)).observe(diag);
+  // a linha sob as frases-chave corre quando a frase entra na tela (a do hero espera a entrada dele terminar)
+  if ('IntersectionObserver' in window) {
+    const vigiaGrifo = new IntersectionObserver((itens, io) => itens.forEach(e => { if (e.isIntersecting) { e.target.classList.add('grifado'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -18% 0px' });
+    $$('.grifo').filter(g => !g.closest('.hero')).forEach(g => vigiaGrifo.observe(g));
+  } else $$('.grifo').forEach(g => g.classList.add('grifado'));
   if (!temGsap || reduz) {
     html.classList.remove('carregando', 'intro');
     const ioNav = new IntersectionObserver(ents => ents.forEach(e => { if (e.isIntersecting) defineAtual(e.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
@@ -596,6 +604,15 @@
 
   /* ---------- hero: entrada (cortina na primeira visita da sessão) ---------- */
   const quebra = (alvo, tipo = 'lines,words') => window.SplitText ? SplitText.create(alvo, { type: tipo, mask: 'lines', linesClass: 'linha' }) : null;
+  // traço à mão sob a palavra-chave do título: entra depois das palavras subirem, quando a máscara das linhas já pode ser solta
+  const TRACO = '<svg class="traco__svg" viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true"><path d="M3 11C52 4 104 3 156 6s96 6 141-1"/></svg>';
+  const riscaTitulo = titulo => {
+    $$('.linha-mask', titulo).forEach(m => { m.style.overflow = 'visible'; });
+    $$('.traco', titulo).filter(t => t.textContent.trim()).forEach(t => {
+      if (!$('.traco__svg', t)) t.insertAdjacentHTML('beforeend', TRACO);
+      requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('riscado')));
+    });
+  };
   // o sol nasce, a fachada sobe dentro do arco, o título sobe palavra a palavra e a prova chega em vidro
   const hero = $('[data-hero]');
   const entradaHero = hero ? (() => {
@@ -640,6 +657,8 @@
   function vivaHero() {
     const botao = $('.hero__agendar', hero);
     if (botao) botao.classList.add('chama');
+    riscaTitulo($('[data-hero-titulo]', hero));
+    $$('.grifo', hero).forEach(g => g.classList.add('grifado'));
     // os laços param quando o hero sai da tela (a órbita em CSS também, pela classe "parado")
     const lacos = leve ? [] : [
       ...$$('[data-hero-chip]', hero).map((c, i) => gsap.to(c, { yPercent: i % 2 ? 7 : -7, duration: 3.2 + i * .7, ease: 'sine.inOut', yoyo: true, repeat: -1 })),
@@ -683,8 +702,20 @@
   /* ---------- títulos: palavras sobem de uma máscara ---------- */
   $$('[data-palavras]').forEach(h => {
     const sp = quebra(h);
-    if (!sp) return;
-    gsap.from(sp.words, { yPercent: 115, rotate: 4, duration: 1.1, stagger: .035, ease: 'expo.out', scrollTrigger: { trigger: h, start: 'top 88%' } });
+    if (!sp) return riscaTitulo(h);
+    gsap.from(sp.words, { yPercent: 115, rotate: 4, duration: 1.1, stagger: .035, ease: 'expo.out', onComplete: () => riscaTitulo(h), scrollTrigger: { trigger: h, start: 'top 88%' } });
+  });
+
+  /* ---------- parágrafos: sobem linha por linha ---------- */
+  if (!leve) $$('[data-linhas]').forEach(p => {
+    const sp = quebra(p, 'lines');
+    if (sp) gsap.from(sp.lines, { yPercent: 110, opacity: 0, duration: 1, stagger: .1, ease: 'expo.out', scrollTrigger: { trigger: p, start: 'top 88%' } });
+  });
+
+  /* ---------- citação: acende palavra por palavra com a rolagem ---------- */
+  if (!leve && window.SplitText) $$('[data-acende]').forEach(p => {
+    const sp = SplitText.create(p, { type: 'words' });
+    gsap.fromTo(sp.words, { opacity: .16 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: p, start: 'top 85%', end: 'top 45%', scrub: true } });
   });
 
   /* ---------- declaração: acende palavra por palavra ---------- */
@@ -703,6 +734,21 @@
   });
   $$('.bento__cel img').forEach(img => gsap.from(img, { scale: 1.35, duration: 1.8, ease: 'expo.out', scrollTrigger: { trigger: img.parentElement, start: 'top 88%' } }));
   $$('[data-lista]').forEach(l => gsap.from(l.children, { x: -24, opacity: 0, duration: .9, stagger: .07, ease: 'expo.out', scrollTrigger: { trigger: l, start: 'top 85%' } }));
+
+  /* ---------- diagnóstico: a foto surge atrás de uma linha de corte, como um exame, e o texto sobe linha por linha ---------- */
+  if (!leve) $$('[data-diag-item]').forEach(item => {
+    const img = $('img', item), raio = $('.diag__raio', item), painel = $('.diag__painel', item);
+    const titulo = quebra($('h3', painel)), texto = quebra($('p', painel), 'lines');
+    const altura = () => item.querySelector('.diag__foto').offsetHeight;
+    const tl = gsap.timeline({ scrollTrigger: { trigger: item, start: 'top 80%', once: true } });
+    tl.fromTo(img, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.16 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 1.5, ease: 'expo.inOut', clearProps: 'clipPath,transform' }, 0)
+      .fromTo(raio, { y: altura, opacity: 1 }, { y: 0, duration: 1.5, ease: 'expo.inOut' }, 0)
+      .to(raio, { opacity: 0, duration: .3 }, 1.35);
+    if (titulo) tl.from(titulo.words, { yPercent: 115, duration: .9, stagger: .05, ease: 'expo.out' }, .35);
+    if (texto) tl.from(texto.lines, { yPercent: 110, opacity: 0, duration: .9, stagger: .09, ease: 'expo.out' }, .5);
+    tl.from($$('.fichas-info li', painel), { scale: .8, opacity: 0, duration: .6, stagger: .05, ease: 'back.out(2)' }, .75)
+      .from($$('.diag__exemplo, .link-seta', painel), { y: 14, opacity: 0, duration: .7, stagger: .1, ease: 'expo.out' }, .95);
+  });
 
   // inclinação 3D nas portas
   if (fino) $$('[data-tilt]').forEach(c => {
@@ -810,7 +856,7 @@
     const pan = gsap.to(trilho, {
       x: () => -dist(), ease: 'none',
       scrollTrigger: {
-        trigger: '.servicos', start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: true, invalidateOnRefresh: true, anticipatePin: 1,
+        trigger: '.servicos', start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: true, invalidateOnRefresh: true, anticipatePin: 1, refreshPriority: 1,
         // no celular a barra de baixo (WhatsApp, Ligar) sai enquanto o palco está fixo, para não cobrir os cartões
         onToggle: s => { if (barraMovel) barraMovel.classList.toggle('no-palco', s.isActive); },
         onUpdate: s => {
@@ -855,6 +901,12 @@
     gsap.from('.pino', { y: -30, opacity: 0, duration: .9, stagger: .1, ease: 'back.out(1.8)', scrollTrigger: { trigger: mapaGrande, start: 'top 75%' } });
   }
 
+  // a seção fixada soma quase 3 mil pixels à página e é criada depois das entradas de texto e de cartões. Sem esta ordem,
+  // tudo o que vem abaixo dela media a posição sem essa altura e animava três telas antes de aparecer
+  ScrollTrigger.addEventListener('refreshInit', () => ScrollTrigger.sort());
+  ScrollTrigger.sort();
+  ScrollTrigger.refresh();
+
   // recalcula depois das imagens e fontes
   addEventListener('load', () => ScrollTrigger.refresh());
 
@@ -865,6 +917,7 @@
     const vai = () => {
       if (pos >= 0 && Math.abs(scrollY - pos) > 4) return; // a pessoa já rolou: não puxa de volta
       ScrollTrigger.refresh();
+      if (lenis) lenis.resize(); // a rolagem suave guardava a altura antiga e parava antes de seções perto do fim
       pos = destinoDe(inicial);
       lenis ? lenis.scrollTo(pos, { immediate: true, force: true }) : scrollTo(0, pos);
     };

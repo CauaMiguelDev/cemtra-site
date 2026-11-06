@@ -17,7 +17,7 @@ Secondary: o colaborador/paciente que já fez exame e quer o resultado (link ext
 
 ## Product Purpose
 
-CEMTRA – Centro Especializado em Medicina do Trabalho. Clínica de saúde ocupacional e segurança do trabalho: exames ocupacionais (admissional, periódico, demissional, retorno ao trabalho, mudança de função), laudos e programas (PCMSO, PGR, LTCAT), saúde mental ocupacional (psiquiatria e psicologia), avaliação psicossocial, ergonomia, treinamentos e palestras, apoio em eSocial. RNM, TC, fisioterapia (reabilitação funcional) e exames complementares são feitos com a medicina convencional do grupo, a Clínica Santa Rita. Sucesso = empresa pede orçamento / agenda pelo WhatsApp.
+CEMTRA – Centro Especializado em Medicina do Trabalho. Clínica de saúde ocupacional e segurança do trabalho: exames ocupacionais (admissional, periódico, demissional, retorno ao trabalho, mudança de função), laudos e programas (PCMSO, PGR, LTCAT), saúde mental ocupacional (psiquiatria e psicologia), avaliação psicossocial, ergonomia, treinamentos e palestras, apoio em eSocial. RNM, TC, fisioterapia (reabilitação funcional) e exames complementares com a medicina convencional da CEMTRA. Sucesso = empresa pede orçamento / agenda pelo WhatsApp.
 
 ## Positioning
 
@@ -30,6 +30,7 @@ CEMTRA – Centro Especializado em Medicina do Trabalho. Clínica de saúde ocup
 - WhatsApp por unidade: Taguatinga 5561993703306, Asa Sul 5561993886775, Sobradinho 5561992534533, Águas Lindas 5561992581800, Santo Antônio 55619992582301 (número como está no site atual — parece ter um dígito a mais; confirmar com o cliente).
 - Telefone fixo (61) 3355-6435 · contato@cemtradf.com.br · Funcionamento Seg–Sex 07h00–17h00; chegada para consulta 07h00–10h00 e 13h00–15h00 (quem chega perto das 17h não consegue concluir o atendimento).
 - Resultados de exames: https://www.rico.uniexames.com.br/logins/login
+- O site usa só o nome CEMTRA (decisão do cliente em 2026-11-06): não citar a Clínica Santa Rita. As fotos das salas de RNM e TC vieram do site dela, com autorização do cliente, e a lista de exames complementares (ECG, espirometria, MAPA/Holter, ultrassom, laboratório) também.
 - Normas citadas: NR-7 (PCMSO), NR-9 (PGR), NR-15, NR-17, Política Nacional de Saúde Mental no Trabalho.
 
 ## Brand Commitments
