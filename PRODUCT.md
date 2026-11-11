@@ -21,12 +21,12 @@ CEMTRA – Centro Especializado em Medicina do Trabalho. Clínica de saúde ocup
 
 ## Positioning
 
-"A primeira policlínica de medicina do trabalho de Brasília." Gestão ocupacional completa em um só lugar (absenteísmo, laudos, programas, treinamentos, palestras, psiquiatria), com 5 unidades no DF e entorno.
+"A primeira policlínica de medicina do trabalho de Brasília." Gestão ocupacional completa em um só lugar (absenteísmo, laudos, programas, treinamentos, palestras, psiquiatria), com 6 unidades no DF e entorno.
 
 ## Operating Context
 
-- Unidades: Taguatinga (matriz, QND 47 Lote 08 – em frente à Universal, CEP 72120-470), Asa Sul, Sobradinho, Águas Lindas de Goiás, Santo Antônio do Descoberto.
-- Santo Antônio do Descoberto: no site o WhatsApp vai para a matriz até o cliente confirmar o número correto da unidade.
+- Unidades: Taguatinga (matriz, QND 47 Lote 08 – em frente à Universal, CEP 72120-470), Asa Sul, Sobradinho, Águas Lindas de Goiás, Santo Antônio do Descoberto, Riacho Fundo I (CLN 07, Bloco F, Lote 01, CEP 71800-000; atende só quarta, chegada 7h–10h, e quinta, chegada 13h–15h).
+- Santo Antônio do Descoberto e Riacho Fundo: no site o WhatsApp vai para a matriz até o cliente confirmar o número de cada unidade. O site da Clínica Santa Rita lista 61 99258-2301 (Santo Antônio) e 61 99288-9508 (Riacho Fundo), não confirmados.
 - WhatsApp por unidade: Taguatinga 5561993703306, Asa Sul 5561993886775, Sobradinho 5561992534533, Águas Lindas 5561992581800, Santo Antônio 55619992582301 (número como está no site atual — parece ter um dígito a mais; confirmar com o cliente).
 - Telefone fixo (61) 3355-6435 · contato@cemtradf.com.br · Funcionamento Seg–Sex 07h00–17h00; chegada para consulta 07h00–10h00 e 13h00–15h00 (quem chega perto das 17h não consegue concluir o atendimento).
 - Resultados de exames: https://www.rico.uniexames.com.br/logins/login

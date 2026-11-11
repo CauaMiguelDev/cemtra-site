@@ -760,6 +760,7 @@ strong, b { font-weight: 750; }
 .pino__rotulo { padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.88); box-shadow: 0 10px 22px -12px rgba(21,23,27,.5), inset 0 0 0 1px #fff; font-size: .8125rem; font-weight: 750; white-space: nowrap; transition: background-color .3s ease, color .3s ease, scale .4s var(--ease); }
 .pino__ponto { position: relative; width: 18px; height: 18px; border-radius: 50%; background: var(--tinta); box-shadow: 0 0 0 4px #fff, 0 6px 12px -4px rgba(21,23,27,.6); transition: background-color .3s ease, scale .4s var(--ease); }
 .pino:hover .pino__rotulo { scale: 1.05; }
+.pino--baixo { flex-direction: column-reverse; translate: -50% -18px; }
 .pino.ativo { z-index: 2; }
 .pino.ativo .pino__rotulo { background: var(--tinta); color: var(--branco); }
 .pino.ativo .pino__ponto { background: var(--sol); scale: 1.25; }
