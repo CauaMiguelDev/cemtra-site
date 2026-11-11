@@ -48,12 +48,12 @@
       rota: 'https://www.google.com/maps/search/?api=1&query=-15.9460449,-48.2653426',
       mapa: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1918.1467229654575!2d-48.2653426!3d-15.9460449!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935bdaf4e4155ab9%3A0xe455ee9273e59331!2sCl%C3%ADnica%20Santa%20Rita!5e0!3m2!1spt-BR!2sbr!4v1757350189416!5m2!1spt-BR!2sbr' },
     // WhatsApp próprio pendente: até o cliente passar o número da unidade, vai para a matriz. Horário próprio, só quarta e quinta.
-    { id: 'rf', nome: 'Riacho Fundo', lat: -15.8847, lng: -48.0213,
+    { id: 'rf', nome: 'Riacho Fundo', lat: -15.88469, lng: -48.02131,
       end: 'CLN 07, Bloco F, Lote 01, Riacho Fundo I. Brasília, DF. CEP 71800-000. Atendimento pelo WhatsApp da matriz.',
       wa: '5561993703306',
       rotulo: 'baixo', // fica logo abaixo de Taguatinga: com o rótulo em cima, cobriria o ponto dela
       horario: ['Atendimento às quartas e quintas', 'Quarta: chegue das 7h às 10h. Quinta: chegue das 13h às 15h.'],
-      rota: 'https://www.google.com/maps/search/?api=1&query=4X8H%2B4F+Riacho+Fundo,+Bras%C3%ADlia' },
+      rota: 'https://www.google.com/maps/search/?api=1&query=-15.88469,-48.02131' },
   ];
   const waLink = (num, msg) => `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
 
